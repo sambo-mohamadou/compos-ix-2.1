@@ -10,6 +10,7 @@ module.exports = withMT({
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
+      'rednormal': '#ff0000',
       'googleGreen': '#34A853',
       'googleRed': '#EA4335',
       'googleYellow': '#FBBC05',
