@@ -4,14 +4,14 @@
 .loginContainer{
   @apply h-screen w-full relative overflow-hidden;
   background: linear-gradient(120deg, #E9D6A5, #EEF1F5);
-  padding: 2% 4%;
+  padding: 1% 3%;
 }
 .mainLoginContainer{
-  @apply overflow-hidden relative shadow-lg;
+  @apply overflow-hidden relative;
     background: white;
     width: 100%;
     height: 100%;
-    border-radius: 64px;
+    border-radius: 56px;
 }
 
 .textWelcome{
@@ -21,7 +21,7 @@
     font-weight: 700;
 }
 .leftSide{
-    @apply h-full relative flex flex-col justify-between items-start py-12 pl-4;
+    @apply h-full relative flex flex-col justify-between items-start py-8 pl-4;
     width: 55% !important;
     background: rgba(15, 100, 246, 0.8);
     z-index: 99;

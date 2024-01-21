@@ -15,7 +15,7 @@ module.exports = withMT({
       'googleRed': '#EA4335',
       'googleYellow': '#FBBC05',
       'googleBlue': '#4285F4',
-      'lightBlue': '#E2EBF9',
+      'light-blue': '#E2EBF9',
     },
     extend: {},
   },
