@@ -2,20 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+body{
+    @apply h-full overflow-x-hidden
+}
+html{
+    @apply h-full
+}
+#__next{
+    @apply h-full
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.public-DraftEditor-content > div h1{
+    @apply text-4xl;
 }
 
-body {
 
+.node-doc{
+    font-weight: bold;
+    font-size: 45px;
+    text-align: center;
+}
+
+.node-part{
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.node-chapter{
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.node-paragraph{
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.node-notion{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.notion-body{
+    font-size: 15px;
 }
