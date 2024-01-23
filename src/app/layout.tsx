@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 // These styles apply to every route in the application
 import './globals.css'
 import { AuthProvider } from '../contexts/AuthContext'
+import '../styles/editor.css'
+
  
 export const metadata: Metadata = {
   title: 'Create Next App',
