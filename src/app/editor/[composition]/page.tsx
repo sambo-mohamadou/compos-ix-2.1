@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import DOMPurify from "dompurify";
 import { AiOutlinePlus, AiOutlineSave } from "react-icons/ai";
-import "../../styles/editor.css";
+import "../../../styles/editor.css";
 // import officegen from 'officegen'
 // import fs from "fs"
 
@@ -12,10 +12,10 @@ import {
   ToolBarButton,
   NodesCard,
   RichTextEditor,
-} from "../../components/editorTools";
+} from "../../../components/editorTools";
 import axios from "axios";
 
-function CreationEditor() {
+function CreationEditor({ params }) {
   // let docx = officegen({
   //     type: 'docx', // We want to create a Microsoft Word document.
   // })
@@ -29,7 +29,7 @@ function CreationEditor() {
   const [tableOfContents, setTableOfcontents] = useState([
     {
       nodeType: "DOC",
-      nodeTitle: "Titre de cours",
+      nodeTitle: params.composition,
       nodeLevel: "Co0",
       parent: undefined,
       htmlContent: "",
@@ -175,12 +175,12 @@ function CreationEditor() {
             nodeColor: "#E2EBF9",
             textColor: "#4285F4",
           },
-          {
-            nodeType: "PARAGRAPH",
-            nodeInitial: "Pr",
-            nodeColor: "#EA4335",
-            textColor: "white",
-          },
+          // {
+          //   nodeType: "PARAGRAPH",
+          //   nodeInitial: "Pr",
+          //   nodeColor: "#EA4335",
+          //   textColor: "white",
+          // },
           {
             nodeType: "PART",
             nodeInitial: "Pt",
@@ -197,12 +197,12 @@ function CreationEditor() {
             nodeColor: "#E2EBF9",
             textColor: "#4285F4",
           },
-          {
-            nodeType: "PARAGRAPH",
-            nodeInitial: "Pr",
-            nodeColor: "#EA4335",
-            textColor: "white",
-          },
+          // {
+          //   nodeType: "PARAGRAPH",
+          //   nodeInitial: "Pr",
+          //   nodeColor: "#EA4335",
+          //   textColor: "white",
+          // },
           {
             nodeType: "CHAPTER",
             nodeInitial: "Ch",
@@ -557,41 +557,46 @@ function CreationEditor() {
                   </div>
                   <div className="border-2 border-[#4285F4] rounded-lg h-full flex flex-col justify-evenly items-center">
                     <span className="capitalize text-[20px] font-bold">
-                      Select the node you want to add?
+                      Select the node you want to add
                     </span>
                     <div className="flex flex-row justify-evenly w-full">
-                      {addNodeOptions.map((nodeOption, index) => (
-                        <button
-                          onClick={() => handleOpenAddTitleModal(nodeOption)}
-                          key={index}
-                          className="p-[8px] flex flex-col gap-[5px] items-center"
-                          style={{
-                            backgroundColor: "white",
-                            borderRadius: 8,
-                            boxShadow:
-                              "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
-                          }}
-                        >
-                          <span
-                            className="text-[50px]"
+                      {addNodeOptions.map((nodeOption, index) => {
+                        console.log(nodeOption);
+                        return (
+                          <button
+                            onClick={() => handleOpenAddTitleModal(nodeOption)}
+                            key={index}
+                            className="p-[8px] flex flex-col gap-[5px] items-center"
                             style={{
-                              width: 100,
-                              height: 100,
-                              fontWeight: "bold",
-                              padding: "8px",
-                              borderRadius: 100,
-                              textAlign: "center",
-                              backgroundColor: `${nodeOption.nodeColor}`,
-                              color: `${nodeOption.textColor}`,
+                              backgroundColor: "white",
+                              borderRadius: 8,
+                              boxShadow:
+                                "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
                             }}
                           >
-                            {nodeOption.nodeInitial}
-                          </span>
-                          <span style={{ color: "black", fontWeight: "bold" }}>
-                            {nodeOption.nodeType}
-                          </span>
-                        </button>
-                      ))}
+                            <span
+                              className="text-[50px]"
+                              style={{
+                                width: 100,
+                                height: 100,
+                                fontWeight: "bold",
+                                padding: "8px",
+                                borderRadius: 100,
+                                textAlign: "center",
+                                backgroundColor: `${nodeOption.nodeColor}`,
+                                color: `${nodeOption.textColor}`,
+                              }}
+                            >
+                              {nodeOption.nodeInitial}
+                            </span>
+                            <span
+                              style={{ color: "black", fontWeight: "bold" }}
+                            >
+                              {nodeOption.nodeType}
+                            </span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

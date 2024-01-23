@@ -22,11 +22,11 @@ const ManagerSideBar = ({compositionList}) => {
       <div className="w-hull h-full">
         <div
           style={{ marginBottom: "16px" }}
-          className="flex text-black justify-between items-center w-full bg-blue-200 h-12 rounded-lg px-2 cursor-pointer"
+          className="flex text-black justify-between compositions-center w-full bg-blue-200 h-12 rounded-lg px-2 cursor-pointer"
           onClick={togleOpened}
         >
           <p className="font-bold">Mes Compositions</p>
-          <div className="flex items-center justify-between">
+          <div className="flex compositions-center justify-between">
             {compositionList.length}
             <span>
               {opened ? (
@@ -39,22 +39,22 @@ const ManagerSideBar = ({compositionList}) => {
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {compositionList.map((item, index) => (
+          {compositionList.map((composition:string, index:number) => (
             <div
               key={index}
               onMouseEnter={() => onMouseEnter(index)}
               onMouseLeave={onMouseLeave}
             >
               <Link
-                href="/editor"//Je dois Configurer de tellle sorte que le lien rnvoit à la bonne configuration
+                href={`/editor/${composition}`}
                 style={{
                   display: opened ? "block" : "none",
                   backgroundColor:
                     isHoveringIndex === index ? "#D3D3D3" : "white",
                 }}
-                className="cursor-pointer rounded-md border-b border-solid px-2 py-3 text-black"
+                className="^w-full cursor-pointer rounded-md border-b border-solid px-2 py-3 text-black"
               >
-                {item}
+                {composition}
               </Link>
             </div>
           ))}
