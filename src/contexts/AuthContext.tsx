@@ -1,4 +1,4 @@
-// context/AuthContext.tsx
+
 
 import { createContext, useContext, useState, useEffect } from 'react';
 import { ReactNode } from 'react';
@@ -10,7 +10,12 @@ interface User {
 }
 
 interface UserInfo {
-  // Define the properties you expect from the /api/getUserInfo endpoint
+  titre : string,
+  partie: string,
+  chapitre: string,
+  paragraph : string,
+  notion: string
+
 }
 
 interface Props {

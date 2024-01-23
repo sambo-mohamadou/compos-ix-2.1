@@ -11,7 +11,7 @@ import { useAuth } from '@/src/contexts/AuthContext'
 
 const page = () => {
 
-  // const { loginDetails } = useAuth();
+  const {loginDetails} = useAuth();
 
     const navigation = useRouter();
 
@@ -83,7 +83,7 @@ const signUp = async () => {
                   email: email,
                   token: token
                 }
-              // loginDetails(email, token)
+              loginDetails(email, token)
             }
             setisSubmit(true)
         }
@@ -142,7 +142,7 @@ const signUp = async () => {
                 email: email,
                 token: token
               }
-              // loginDetails(email, token)
+              loginDetails(email, token)
             }
     
             setisSubmit(true)

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
  
 // These styles apply to every route in the application
 import './globals.css'
+import { AuthProvider } from '../contexts/AuthContext'
  
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,7 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}</AuthProvider>
+      </body>
     </html>
   )
 }
