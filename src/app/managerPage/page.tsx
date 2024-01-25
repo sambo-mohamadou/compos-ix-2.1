@@ -11,7 +11,7 @@ const page = () => {
   const [compositionName, setCompositionName] = useState("");
   const [compositionList, setCompositionList] = useState<string[]>([]);
 
-  const handleAddComposition = (e) => {
+  const handleAddComposition = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!compositionName) return;
     setCompositionList([...compositionList,compositionName]);

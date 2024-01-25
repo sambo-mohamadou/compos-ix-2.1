@@ -11,7 +11,7 @@ import { useAuth } from '@/src/contexts/AuthContext'
 
 const page = () => {
 
-  const {loginDetails} = useAuth();
+  const { user, userInfo, loginDetails, logout } = useAuth();
 
     const navigation = useRouter();
 

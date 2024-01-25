@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import React, { Children } from 'react'
 import styles from '@/styles/AuthLayout.module.css'
+import { AuthProvider } from '@/src/contexts/AuthContext'
 
 type Props = {
     title: string,
@@ -11,6 +12,7 @@ type Props = {
 const AuthLayout = ({title, children}: Props) => {
   return (
     <>
+        
         <Head>
             <title>{title}</title>
         </Head>

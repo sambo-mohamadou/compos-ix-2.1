@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { FaChevronDown, FaChevronRight } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { AuthProvider } from "@/src/contexts/AuthContext";
 import Link from "next/link";
 
-const ManagerSideBar = ({compositionList}) => {
-  // const {user, userInfo} = useAuth();
+const ManagerSideBar: React.FC<{ compositionList: string[] | [] }> = ({ compositionList }) => {
+  const {user, userInfo} = useAuth();
 
 
   const [opened, setOpened] = useState(true);
@@ -22,17 +22,17 @@ const ManagerSideBar = ({compositionList}) => {
       <div className="w-hull h-full">
         <div
           style={{ marginBottom: "16px" }}
-          className="flex text-black justify-between compositions-center w-full bg-blue-200 h-12 rounded-lg px-2 cursor-pointer"
-          onClick={togleOpened}
-        >
+          className="flex text-black justify-between compositions-center items-center w-full bg-blue-200 h-12 rounded-lg px-2 cursor-pointer"
+          onClick={togleOpened}>
+
           <p className="font-bold">Mes Compositions</p>
-          <div className="flex compositions-center justify-between">
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
             {compositionList.length}
             <span>
               {opened ? (
                 <FaChevronDown size={18} />
               ) : (
-                <FaChevronRight size={18} />
+                <FaChevronUp size={18} />
               )}
             </span>
           </div>
