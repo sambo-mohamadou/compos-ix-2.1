@@ -1,10 +1,20 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import DOMPurify from "dompurify";
-import { AiOutlinePlus, AiOutlineSave } from "react-icons/ai";
-import "../../../styles/editor.css";
-// import officegen from 'officegen'
-// import fs from "fs"
+'use client';
+import React, { useState, useEffect, useRef } from 'react';
+import DOMPurify from 'dompurify';
+import { AiOutlinePlus, AiOutlineSave } from 'react-icons/ai';
+import '../../../styles/editor.css';
+import { BiSolidFileHtml } from 'react-icons/bi';
+import { FaFilePdf } from 'react-icons/fa';
+import { FaFileWord } from 'react-icons/fa';
+import { IconContext } from 'react-icons';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import pdfMake from 'pdfmake/build/pdfmake';
+import htmlToPdfmake from 'html-to-pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+import { generateDocx } from './file-saver';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 import {
   Header,
@@ -12,27 +22,102 @@ import {
   ToolBarButton,
   NodesCard,
   RichTextEditor,
-} from "../../../components/editorTools";
-import axios from "axios";
+} from '../../../components/editorTools';
+import axios from 'axios';
+
+const createEmptyNotion = () => {
+  return {
+    id: new Date().getTime(), // Unique identifier for each Notion
+    content: '',
+    editorOpen: true,
+  };
+};
 
 function CreationEditor({ params }) {
   // let docx = officegen({
   //     type: 'docx', // We want to create a Microsoft Word document.
   // })
 
+  const [notions, setNotions] = useState([createEmptyNotion()]);
+  const [activeNotionId, setActiveNotionId] = useState(0);
+
+  const addNewNotion = () => {
+    const newNotion = createEmptyNotion();
+    setNotions((prevNotions) => [...prevNotions, newNotion]);
+    setActiveNotionId(newNotion.id);
+  };
+
+  const handleRichTextChangeForNotion = (notionId: number, value: string) => {
+    setNotions((prevNotions) =>
+      prevNotions.map((notion) =>
+        notion.id === notionId ? { ...notion, content: value } : notion
+      )
+    );
+  };
+  const generateDocument = async (title, value) => {
+    return await generateDocx(title, value);
+  };
+  const generatePdf = () => {
+    const combinedHtml = `<div>${renderingHtml}</div><div>${richTextValue}</div>`;
+
+    const documentDefinition = {
+      content: htmlToPdfmake(combinedHtml),
+    };
+
+    const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
+
+    // You can open the PDF in a new window or download it
+    pdfDocGenerator.open();
+    // OR
+    // pdfDocGenerator.download('example.pdf');
+  };
   const [isModalActive, setIsModalActive] = useState(false);
   const [isNodeTitleModalActive, setIsNodeTitleActive] = useState(false);
   const [isNotionEditorActive, setIsNotionEditorActive] = useState(false);
 
-  const [renderingHtml, setRenderingHtml] = useState("");
+  const [richTextValue, setRichTextValue] = useState('');
+
+  const handleRichTextChange = (value: string) => {
+    setRichTextValue(value);
+  };
+
+  const [renderingHtml, setRenderingHtml] = useState('');
+
+  const [isHtmlHovered, setIsHtmlHovered] = useState(false);
+  const [isPdfHovered, setIsPdfHovered] = useState(false);
+  const [isWordHovered, setIsWordHovered] = useState(false);
+
+  const handleHtmlMouseEnter = () => {
+    setIsHtmlHovered(true);
+  };
+
+  const handleHtmlMouseLeave = () => {
+    setIsHtmlHovered(false);
+  };
+
+  const handlePdfMouseEnter = () => {
+    setIsPdfHovered(true);
+  };
+
+  const handlePdfMouseLeave = () => {
+    setIsPdfHovered(false);
+  };
+
+  const handleWordMouseEnter = () => {
+    setIsWordHovered(true);
+  };
+
+  const handleWordMouseLeave = () => {
+    setIsWordHovered(false);
+  };
 
   const [tableOfContents, setTableOfcontents] = useState([
     {
-      nodeType: "DOC",
+      nodeType: 'DOC',
       nodeTitle: params.composition,
-      nodeLevel: "Co0",
+      nodeLevel: 'Co0',
       parent: undefined,
-      htmlContent: "",
+      htmlContent: '',
       isClicked: false,
       isEnterPressed: false,
     },
@@ -46,13 +131,14 @@ function CreationEditor({ params }) {
   //const sampleHTML = '<p>Alfred Hetsron Yepnjio</p><ul><li><strong>Sample</strong></li></ul><ol type="1"><li>you</li></ol><ul><li>content</li><li>state</li></ul><p></p>'
   const [htmlEditorContent, setHtmlEditorContent] = useState(null);
   const [newHTMLContent, setNewHTMLContent] = useState(null);
-  const [defaultDraftHTML, setDefaultDraftHTML] = useState("");
+  const [defaultDraftHTML, setDefaultDraftHTML] = useState('');
   const [jsonEditorContent, setJsonEditorContent] = useState(null);
 
   const [addNodeOptions, setAddNodeOptions] = useState(null);
   const [addNodeInfo, setAddNodeInfo] = useState(null);
-  const [addNodeTitle, setAddNodeTitle] = useState("");
+  const [addNodeTitle, setAddNodeTitle] = useState('');
 
+  console.log(addNodeTitle, 111);
   const targetHTMLParseRef = useRef(null);
 
   const handlecloseEditor = () => {
@@ -61,7 +147,7 @@ function CreationEditor({ params }) {
   };
   const parseStringToHTML = (htmlString) => {
     const parser = new DOMParser();
-    const parsedHTML = parser.parseFromString(htmlString, "text/html");
+    const parsedHTML = parser.parseFromString(htmlString, 'text/html');
     return parsedHTML.body;
   };
 
@@ -111,13 +197,13 @@ function CreationEditor({ params }) {
 
   const setAddNodeTypes = (selectedNode) => {
     switch (selectedNode.nodeType) {
-      case "DOC":
+      case 'DOC':
         setAddNodeOptions([
           {
-            nodeType: "NOTION",
-            nodeInitial: "No",
-            nodeColor: "#E2EBF9",
-            textColor: "#4285F4",
+            nodeType: 'NOTION',
+            nodeInitial: 'No',
+            nodeColor: '#E2EBF9',
+            textColor: '#4285F4',
           },
           // {
           //   nodeType: "PARAGRAPH",
@@ -126,20 +212,20 @@ function CreationEditor({ params }) {
           //   textColor: "white",
           // },
           {
-            nodeType: "PART",
-            nodeInitial: "Pt",
-            nodeColor: "#34A853",
-            textColor: "white",
+            nodeType: 'PART',
+            nodeInitial: 'Pt',
+            nodeColor: '#34A853',
+            textColor: 'white',
           },
         ]);
         break;
-      case "PART":
+      case 'PART':
         setAddNodeOptions([
           {
-            nodeType: "NOTION",
-            nodeInitial: "No",
-            nodeColor: "#E2EBF9",
-            textColor: "#4285F4",
+            nodeType: 'NOTION',
+            nodeInitial: 'No',
+            nodeColor: '#E2EBF9',
+            textColor: '#4285F4',
           },
           // {
           //   nodeType: "PARAGRAPH",
@@ -148,46 +234,46 @@ function CreationEditor({ params }) {
           //   textColor: "white",
           // },
           {
-            nodeType: "CHAPTER",
-            nodeInitial: "Ch",
-            nodeColor: "#FBBC05",
-            textColor: "white",
+            nodeType: 'CHAPTER',
+            nodeInitial: 'Ch',
+            nodeColor: '#FBBC05',
+            textColor: 'white',
           },
         ]);
         break;
-      case "CHAPTER":
+      case 'CHAPTER':
         setAddNodeOptions([
           {
-            nodeType: "NOTION",
-            nodeInitial: "No",
-            nodeColor: "#E2EBF9",
-            textColor: "#4285F4",
+            nodeType: 'NOTION',
+            nodeInitial: 'No',
+            nodeColor: '#E2EBF9',
+            textColor: '#4285F4',
           },
           {
-            nodeType: "PARAGRAPH",
-            nodeInitial: "Pr",
-            nodeColor: "#EA4335",
-            textColor: "white",
+            nodeType: 'PARAGRAPH',
+            nodeInitial: 'Pr',
+            nodeColor: '#EA4335',
+            textColor: 'white',
           },
         ]);
         break;
-      case "PARAGRAPH":
+      case 'PARAGRAPH':
         setAddNodeOptions([
           {
-            nodeType: "NOTION",
-            nodeInitial: "No",
-            nodeColor: "#E2EBF9",
-            textColor: "#4285F4",
+            nodeType: 'NOTION',
+            nodeInitial: 'No',
+            nodeColor: '#E2EBF9',
+            textColor: '#4285F4',
           },
         ]);
         break;
       default:
         setAddNodeOptions([
           {
-            nodeType: "NOTION",
-            nodeInitial: "No",
-            nodeColor: "#E2EBF9",
-            textColor: "#4285F4",
+            nodeType: 'NOTION',
+            nodeInitial: 'No',
+            nodeColor: '#E2EBF9',
+            textColor: '#4285F4',
           },
         ]);
         break;
@@ -239,7 +325,7 @@ function CreationEditor({ params }) {
     setIsNodeTitleActive(false);
     setAddNodeOptions([]);
     setAddNodeInfo(null);
-    setAddNodeTitle("");
+    setAddNodeTitle('');
     let tempTOC = [...tableOfContents];
     setTableOfcontents([]);
     setTableOfContentsComponents([]);
@@ -247,29 +333,29 @@ function CreationEditor({ params }) {
   };
 
   function generateHTMLFromGraph(graph) {
-    let htmlString = "";
+    let htmlString = '';
 
     function generateNodeHTML(node) {
-      let nodeHTML = "";
+      let nodeHTML = '';
 
       switch (node.nodeType) {
-        case "DOC":
+        case 'DOC':
           nodeHTML += `<div class="node" data-node-type="DOC">
                 <h1 class="node-doc">${node.nodeTitle}</h1>`;
           break;
-        case "PART":
+        case 'PART':
           nodeHTML += `<div class="node" data-node-type="PART">
                 <h2 class="node-part">${node.nodeTitle}</h2>`;
           break;
-        case "CHAPTER":
+        case 'CHAPTER':
           nodeHTML += `<div class="node" data-node-type="CHAPTER">
                 <h3 class="node-chapter">${node.nodeTitle}</h3>`;
           break;
-        case "PARAGRAPH":
+        case 'PARAGRAPH':
           nodeHTML += `<div class="node" data-node-type="PARAGRAPH">
                 <h4 class="node-paragraph">${node.nodeTitle}</h4>`;
           break;
-        case "NOTION":
+        case 'NOTION':
           nodeHTML += `<div class="node" data-node-type="NOTION">
                 <h5 class="node-notion">${node.nodeTitle}</h5>
                 <p class="notion-body">${node.htmlContent}</p>`;
@@ -284,10 +370,10 @@ function CreationEditor({ params }) {
         children.forEach((child) => {
           nodeHTML += generateNodeHTML(child);
         });
-        nodeHTML += "</div>";
+        nodeHTML += '</div>';
       }
 
-      nodeHTML += "</div>";
+      nodeHTML += '</div>';
 
       return nodeHTML;
     }
@@ -380,11 +466,11 @@ function CreationEditor({ params }) {
       nodeType: addNodeInfo.nodeType,
       nodeTitle: nodeTitle,
       nodeLevel:
-        selectedNode.nodeType !== "NOTION"
+        selectedNode.nodeType !== 'NOTION'
           ? `${addNodeInfo.nodeInitial}${tempTOC.length}`
           : `${selectedNode.nodeLevel}${tempTOC.length}`,
       parent: `${selectedNode.nodeLevel}`,
-      htmlContent: "",
+      htmlContent: '',
       isClicked: false,
       isEnterPressed: false,
     };
@@ -401,7 +487,6 @@ function CreationEditor({ params }) {
     setIsNodeTitleActive(false);
     setAddNodeOptions([]);
     setAddNodeInfo(null);
-    setAddNodeTitle("");
   };
 
   const buildLeftCorner = (newTable) => {
@@ -446,15 +531,16 @@ function CreationEditor({ params }) {
           <div className="w-full h-full">
             <h1
               style={{
-                color: "black",
-                backgroundColor: "#E2EBF9",
-                padding: "8px 4px",
+                color: 'black',
+                backgroundColor: '#E2EBF9',
+                padding: '8px 4px',
                 borderRadius: 8,
-                fontWeight: "bold",
+                fontWeight: 'bold',
               }}
             >
               Table of contents
             </h1>
+
             <div className="!text-left py-[4px] w-ful flex flex-col gap-[4px] pb-5">
               {tableOfContentsComponents}
             </div>
@@ -465,9 +551,9 @@ function CreationEditor({ params }) {
                 onClick={() => handleOpenAddNodeModal()}
                 className="w-12 h-12 rounded-full flex justify-center items-center"
                 style={{
-                  backgroundColor: "#4285F4",
+                  backgroundColor: '#4285F4',
                   borderRadius: 100,
-                  color: "white",
+                  color: 'white',
                 }}
               >
                 <AiOutlinePlus size={20} />
@@ -504,10 +590,10 @@ function CreationEditor({ params }) {
                             key={index}
                             className="p-[8px] flex flex-col gap-[5px] items-center"
                             style={{
-                              backgroundColor: "white",
+                              backgroundColor: 'white',
                               borderRadius: 8,
                               boxShadow:
-                                "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
+                                '0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)',
                             }}
                           >
                             <span
@@ -515,10 +601,10 @@ function CreationEditor({ params }) {
                               style={{
                                 width: 100,
                                 height: 100,
-                                fontWeight: "bold",
-                                padding: "8px",
+                                fontWeight: 'bold',
+                                padding: '8px',
                                 borderRadius: 100,
-                                textAlign: "center",
+                                textAlign: 'center',
                                 backgroundColor: `${nodeOption.nodeColor}`,
                                 color: `${nodeOption.textColor}`,
                               }}
@@ -526,7 +612,7 @@ function CreationEditor({ params }) {
                               {nodeOption.nodeInitial}
                             </span>
                             <span
-                              style={{ color: "black", fontWeight: "bold" }}
+                              style={{ color: 'black', fontWeight: 'bold' }}
                             >
                               {nodeOption.nodeType}
                             </span>
@@ -565,6 +651,7 @@ function CreationEditor({ params }) {
                           onChange={(e) => setAddNodeTitle(e.target.value)}
                           autoFocus
                         />
+
                         <span className="highlight"></span>
                         <span className="bar"></span>
                         <label>New Node Title</label>
@@ -572,32 +659,32 @@ function CreationEditor({ params }) {
                       <div
                         className="p-[6px] flex flex-row gap-[5px] items-baseline rounded-lg"
                         style={{
-                          backgroundColor: "white",
+                          backgroundColor: 'white',
                           boxShadow:
-                            "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
+                            '0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)',
                         }}
                       >
                         <span
                           style={{
-                            fontWeight: "bold",
-                            padding: "2px 5px",
+                            fontWeight: 'bold',
+                            padding: '2px 5px',
                             borderRadius: 100,
-                            textAlign: "center",
+                            textAlign: 'center',
                             backgroundColor: `${addNodeInfo.nodeColor}`,
                             color: `${addNodeInfo.textColor}`,
                           }}
                         >
                           {addNodeInfo.nodeInitial}
                         </span>
-                        <span style={{ color: "black" }}>{addNodeTitle}</span>
+                        <span style={{ color: 'black' }}>{addNodeTitle}</span>
                       </div>
                       <button
                         onClick={() => handleAddNewNodeToTOC(addNodeTitle)}
                         className="capitalize h-12 w-32 text-xl"
                         style={{
-                          backgroundColor: "#4285F4",
+                          backgroundColor: '#4285F4',
                           borderRadius: 8,
-                          color: "white",
+                          color: 'white',
                         }}
                       >
                         Add Node
@@ -613,33 +700,60 @@ function CreationEditor({ params }) {
         {/* The Middle Section */}
         <section className="w-full h-full flex flex-col justify-between items-start px-4 pb-1 overflow-hidden">
           <div className="h-16 w-full flex justiy-between items-center">
-            <div className="w-full h-12">
+            <div className="w-full h-12 flex items-center justify-between">
               <h1 className="font-bold text-3xl uppercase">
                 EDITION DE CONTENUS
               </h1>
+
+              {tableOfContents.length > 1 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: '5px',
+                  }}
+                >
+                  <FaFilePdf
+                    size={34}
+                    style={{ color: isPdfHovered ? '#db1a1a' : '#ff0000' }}
+                    cursor="pointer"
+                    onClick={generatePdf}
+                    onMouseEnter={handlePdfMouseEnter}
+                    onMouseLeave={handlePdfMouseLeave}
+                  />
+
+                  <FaFileWord
+                    size={34}
+                    style={{ color: isWordHovered ? '#1c1cd6' : '#0000FF' }}
+                    cursor="pointer"
+                    onClick={() => {
+                      generateDocument(renderingHtml, richTextValue);
+                      console.log(renderingHtml, richTextValue);
+                    }}
+                    onMouseEnter={handleWordMouseEnter}
+                    onMouseLeave={handleWordMouseLeave}
+                  />
+
+                  <button
+                    style={{ padding: '6px 12px', color: 'white' }}
+                    className="bg-blue-500 rounded-md hover:bg-blue-600"
+                  >
+                    Enregristrez
+                  </button>
+                </div>
+              )}
             </div>
-            {tableOfContents.length > 1 && (
-              <button
-                className="capitalize h-12 w-[300px] text-xl"
-                style={{
-                  backgroundColor: "#4285F4",
-                  borderRadius: 8,
-                  color: "white",
-                }}
-              >
-                Générer Fichier Word
-              </button>
-            )}
           </div>
           <div className="w-full relative h-[calc(100%-64px)] overflow-hidden border-[#E2EBF9] px-[2px] border-2 rounded-lg">
             {isNotionEditorActive && (
               <div className="w-full px-4 flex justify-end items-center h-[50px] z-50 border relative">
-                <buttton
+                <button
                   onClick={handlecloseEditor}
                   className="h-8 w-8 absolute right-8 top-14 z-50 flex justify-center items-center border cursor-pointer"
                 >
                   <AiOutlineSave size={20} />
-                </buttton>
+                </button>
               </div>
             )}
             <div className="w-full h-full overflow-scroll">
@@ -647,7 +761,10 @@ function CreationEditor({ params }) {
                         <br />
                         <br />
                         <div>{JSON.stringify(enterPressedNotion)}</div> */}
-              {isNotionEditorActive && <RichTextEditor />}
+
+              {isNotionEditorActive && (
+                <RichTextEditor props={handleRichTextChange} />
+              )}
               <div className="w-full h-full overflow-hidden bg-white p-4">
                 {/* {isNotionEditorActive &&
                             <div className='html-viewer' >
@@ -665,13 +782,24 @@ function CreationEditor({ params }) {
                   <div
                     dangerouslySetInnerHTML={{ __html: renderingHtml }}
                   ></div>
+                  {!isNotionEditorActive && (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: richTextValue }}
+                    ></div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </section>
         {/* notion finder zone */}
-        <NotionFinder />
+        {!isNotionEditorActive && (
+          <NotionFinder
+            addNodeTitle={addNodeTitle}
+            richTextValue={richTextValue}
+            documentTitle={params.composition}
+          />
+        )}
       </div>
     </div>
   );
