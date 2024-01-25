@@ -39,7 +39,7 @@ function CreationEditor({ params }) {
   ]);
   const [tableOfContentsComponents, setTableOfContentsComponents] = useState(
     []
-  );
+  ); //Contiendra les composants de la table of content qui serront affichés (les NodeCard)
   const [selectedNode, setSelectedNode] = useState(null);
   const [enterPressedNotion, setEnterPressedNotion] = useState(null);
 
@@ -63,62 +63,6 @@ function CreationEditor({ params }) {
     const parser = new DOMParser();
     const parsedHTML = parser.parseFromString(htmlString, "text/html");
     return parsedHTML.body;
-  };
-
-  const generateDOCXFile = (docx) => {
-    docx.setDocTitle(tableOfContents[0].nodeTitle); // Set the Title of the document to the Course Node Title
-
-    // Create a new paragraph:
-    // let pObj = docx.createP()
-
-    // pObj.addText ( ' Fonts face and size. ', { font_face: 'Arial', font_size: 40 } );
-
-    tableOfContents.forEach((node) => {
-      switch (node.nodeType) {
-        case "DOC":
-          let docParObj = docx.createP({ align: "center" });
-          docParObj.addText(node.nodeTitle, { bold: true, font_size: 20 });
-          docParObj.addLineBreak();
-          break;
-        case "PART":
-          let partParObj = docx.createP();
-          partParObj.addText(node.nodeTitle, { bold: true, font_size: 16 });
-          partParObj.addLineBreak();
-          break;
-        case "CHAPITRE":
-          let chapParObj = docx.createP();
-          chapParObj.addText(node.nodeTitle, { bold: true, font_size: 13 });
-          chapParObj.addLineBreak();
-          break;
-        case "PARAGRAPH":
-          let parParObj = docx.createP();
-          parParObj.addText(node.nodeTitle, { bold: true, font_size: 12 });
-          parParObj.addLineBreak();
-          break;
-        case "NOTION":
-          let noParObj = docx.createP();
-          noParObj.addText(node.nodeTitle !== "" ? node.nodeTitle : "", {
-            bold: true,
-            font_size: 11,
-          });
-          noParObj.addText(node.nodeTitle !== "" ? node.nodeTitle : "", {
-            font_size: 11,
-          });
-          noParObj.addLineBreak();
-          break;
-        default:
-          let parObj = docx.createP();
-          break;
-      }
-    });
-
-    let out = fs.createWriteStream("sma.docx");
-    out.on("error", function (err) {
-      console.log(err);
-    });
-
-    // Async call to generate the output file:
-    docx.generate(out);
   };
 
   const setEnterPressNotionInTOC = (nodeInfo) => {
@@ -477,14 +421,6 @@ function CreationEditor({ params }) {
     setTableOfContentsComponents(leftCornerContent);
   };
 
-  const generateWordDocument = async () => {
-    const response = await axios.post("/api/generate/word", {
-      tableOfContents,
-    });
-    const { data } = response;
-    console.log(data);
-  };
-
   useEffect(() => {
     if (newHTMLContent !== htmlEditorContent) {
       setNewHTMLContent(htmlEditorContent);
@@ -625,6 +561,7 @@ function CreationEditor({ params }) {
                           required=""
                           type="text"
                           className="input"
+                          onKeyDown={(e) =>{e.key==="Enter"?handleAddNewNodeToTOC(addNodeTitle):""}}
                           onChange={(e) => setAddNodeTitle(e.target.value)}
                           autoFocus
                         />

@@ -5,3 +5,20 @@
 .node-title-input{
     overflow-wrap: break-word;
 }
+
+.paragraph{
+    margin-left:20px;
+}
+
+.part{
+    margin-left: 3px;
+}
+.chapter{
+    margin-left:10px;
+}
+.independantNotion{
+    margin-left:0px;
+}
+.notion{
+    margin-left:25px;
+}
