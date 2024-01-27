@@ -11,8 +11,9 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import pdfMake from 'pdfmake/build/pdfmake';
 import htmlToPdfmake from 'html-to-pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { apiDocx } from '../../api/app';
 
-import { generateDocx } from './file-saver';
+import { generateDocx } from './word-saver';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -57,6 +58,29 @@ function CreationEditor({ params }) {
   const generateDocument = async (title, value) => {
     return await generateDocx(title, value);
   };
+
+  // const generateDocument = async (renderingHtml, richTextValue) => {
+  //   try {
+  //     const response = await fetch('/api/generate-docx', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ renderingHtml, richTextValue }),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+
+  //     const data = await response.json();
+  //     // Trigger file download
+  //     window.location.href = `/${data.filePath}`;
+  //   } catch (error) {
+  //     console.error('Failed to generate document:', error);
+  //   }
+  // };
+
   const generatePdf = () => {
     const combinedHtml = `<div>${renderingHtml}</div><div>${richTextValue}</div>`;
 
@@ -647,7 +671,11 @@ function CreationEditor({ params }) {
                           required=""
                           type="text"
                           className="input"
-                          onKeyDown={(e) =>{e.key==="Enter"?handleAddNewNodeToTOC(addNodeTitle):""}}
+                          onKeyDown={(e) => {
+                            e.key === 'Enter'
+                              ? handleAddNewNodeToTOC(addNodeTitle)
+                              : '';
+                          }}
                           onChange={(e) => setAddNodeTitle(e.target.value)}
                           autoFocus
                         />
@@ -727,10 +755,9 @@ function CreationEditor({ params }) {
                     size={34}
                     style={{ color: isWordHovered ? '#1c1cd6' : '#0000FF' }}
                     cursor="pointer"
-                    onClick={() => {
-                      generateDocument(renderingHtml, richTextValue);
-                      console.log(renderingHtml, richTextValue);
-                    }}
+                    onClick={() =>
+                      generateDocument(renderingHtml, richTextValue)
+                    }
                     onMouseEnter={handleWordMouseEnter}
                     onMouseLeave={handleWordMouseLeave}
                   />

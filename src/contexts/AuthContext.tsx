@@ -1,8 +1,8 @@
-
-'use client'
+'use client';
 import { createContext, useContext, useState, useEffect } from 'react';
 import { ReactNode } from 'react';
 import axios from 'axios';
+import { apiTitles } from '../app/api/app';
 
 interface User {
   email: string;
@@ -10,12 +10,11 @@ interface User {
 }
 
 interface UserInfo {
-  titre : string,
-  partie: string,
-  chapitre: string,
-  paragraph : string,
-  notion: string
-
+  titre: string;
+  partie: string;
+  chapitre: string;
+  paragraph: string;
+  notion: string;
 }
 
 interface Props {
@@ -30,47 +29,49 @@ interface AuthContextProps {
 }
 
 const AuthContext = createContext<AuthContextProps>({
-    user:null,
-    userInfo: null,
-    loginDetails: (email, token) => {console.log('logOut details')},
-    logout: () => {console.log('Logging Out')}
+  user: null,
+  userInfo: null,
+  loginDetails: (email, token) => {
+    console.log('logOut details');
+  },
+  logout: () => {
+    console.log('Logging Out');
+  },
 });
 
 export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User | null>(null);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
-  useEffect(() => {
-
-    if (user && user.email && user.token) {
-        loginDetails(user.email, user.token);
-      }
-
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && user.email && user.token) {
+  //     loginDetails(user.email, user.token);
+  //   }
+  // }, [user]);
 
   const loginDetails = (email: string, token: string) => {
     setUser({ email, token });
-    fetchUserInfo(token);
+    fetchUserInfo(token, email);
   };
 
-  const fetchUserInfo = async (token: string) => {
-
+  const fetchUserInfo = async (token: string, email: string) => {
     try {
-      const response = await axios.get('/api/getUserInfo', {
+      const response = await axios.get(apiTitles + email, {
         headers: {
           Authorization: `Bearer ${token}`,
+          withCredentials: false,
         },
       });
       if (response.data.success === true) {
-        setUserInfo(response.data)
+        setUserInfo(response.data);
       } else {
-        console.error('Error getting user info', response.data.error)
+        console.error('Error getting user info', response.data.error);
       }
     } catch (error) {
       console.error('Error fetching user information:', error);
     }
   };
- 
+
   const logout = () => {
     setUser(null);
     setUserInfo(null);
