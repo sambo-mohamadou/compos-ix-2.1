@@ -9,6 +9,7 @@ const ManagerSideBar: React.FC<{ compositionList: string[] | [] }> = ({ composit
   const {user, userInfo} = useAuth();
 
 
+
   const [opened, setOpened] = useState(true);
   const togleOpened = () => {
     setOpened(!opened);
@@ -44,7 +45,7 @@ const ManagerSideBar: React.FC<{ compositionList: string[] | [] }> = ({ composit
               key={index}
               onMouseEnter={() => onMouseEnter(index)}
               onMouseLeave={onMouseLeave}
-            >
+            > 
               <Link
                 href={`/editor/${composition}`}
                 style={{

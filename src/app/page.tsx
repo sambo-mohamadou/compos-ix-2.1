@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '@/styles/Home.module.css'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Home() {
 
@@ -9,7 +10,7 @@ export default function Home() {
       const currentLink = window.location.href
       window.location.href = `${currentLink}/loginSignup`
   }
-
+  const {user, userInfo} = useAuth();
   return (
     <div>
       <Head>

@@ -5,19 +5,29 @@ import React, { useState } from "react";
 import ManagerSideBar from "@/src/components/ManagerSideBar";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
 import Link from "next/link";
+import { useAuth } from "@/src/contexts/AuthContext";
 
 const page = () => {
   const [createProject, setCreateProject] = useState(false);
   const [compositionName, setCompositionName] = useState("");
   const [compositionList, setCompositionList] = useState<string[]>([]);
 
+  const {user, userInfo} = useAuth();
+
+
   const handleAddComposition = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!compositionName) return;
-    setCompositionList([...compositionList,compositionName]);
+
+      // const userInfoArray = Object.values(userInfo);
+          
+
+    setCompositionList([...compositionList, compositionName]);
     setCompositionName("");
     setCreateProject(false);
   };
+
+  
 
   return (
     <div className="w-full h-screen overflow-hidden flex flex-col justify-between items-start">

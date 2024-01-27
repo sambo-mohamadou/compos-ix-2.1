@@ -2,37 +2,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import DOMPurify from 'dompurify';
 import { AiOutlinePlus, AiOutlineSave } from 'react-icons/ai';
-import '../../../styles/editor.css';
 import { FaFilePdf } from 'react-icons/fa';
 import { FaFileWord } from 'react-icons/fa';
 import pdfMake from 'pdfmake/build/pdfmake';
 import htmlToPdfmake from 'html-to-pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-
 import { generateDocx } from './word-saver';
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 import {
   Header,
   NotionFinder,
-  ToolBarButton,
   NodesCard,
   RichTextEditor,
 } from '../../../components/editorTools';
 import axios from 'axios';
 import { apiTitlesSend } from '../../api/app';
-import { useAuth } from '@/src/contexts/AuthContext';
+import { createEmptyNotion } from './page';
 
-const createEmptyNotion = () => {
-  return {
-    id: new Date().getTime(), // Unique identifier for each Notion
-    content: '',
-    editorOpen: true,
-  };
-};
-
-function CreationEditor({ params }) {
+export function CreationEditor({ params }) {
   interface EditorContents {
     [editorId: string]: string;
   }
@@ -46,7 +31,6 @@ function CreationEditor({ params }) {
   //   setNotions((prevNotions) => [...prevNotions, newNotion]);
   //   setActiveNotionId(newNotion.id);
   // };
-
   const handleRichTextChangeForNotion = (notionId: number, value: string) => {
     setNotions((prevNotions) =>
       prevNotions.map((notion) =>
@@ -67,11 +51,9 @@ function CreationEditor({ params }) {
   //       },
   //       body: JSON.stringify({ renderingHtml, richTextValue }),
   //     });
-
   //     if (!response.ok) {
   //       throw new Error('Network response was not ok');
   //     }
-
   //     const data = await response.json();
   //     // Trigger file download
   //     window.location.href = `/${data.filePath}`;
@@ -79,7 +61,6 @@ function CreationEditor({ params }) {
   //     console.error('Failed to generate document:', error);
   //   }
   // };
-
   const generatePdf = () => {
     const combinedHtml = `<div>${renderingHtml}</div><div>${richTextValue}</div>`;
 
@@ -234,7 +215,6 @@ function CreationEditor({ params }) {
   //     tempTOC[nodeInfo.index].nodeTitle = nodeInfo.nodeTitle;
   //     setTableOfcontents(tempTOC);
   //   }
-
   const setAddNodeTypes = (selectedNode) => {
     switch (selectedNode.nodeType) {
       case 'DOC':
@@ -329,7 +309,6 @@ function CreationEditor({ params }) {
   //             return 'Co'
   //     }
   // }
-
   const insertElementAtPosition = (array, element, index) => {
     const newArray = [...array];
     newArray.splice(index, 0, element);
@@ -553,7 +532,7 @@ function CreationEditor({ params }) {
 
   const sendTitlesAPI = async () => {
     try {
-      const titlesForm = { course: params.composition, author: user?.email };
+      const titlesForm = { course: params.composition };
       const response = await axios.post(apiTitlesSend, titlesForm);
     } catch (err: any) {
       console.error(`Erreur lors de l'inscription`, err);
@@ -800,9 +779,9 @@ function CreationEditor({ params }) {
             )}
             <div className="w-full h-full overflow-scroll">
               {/* <div>{JSON.stringify({tableOfContents})}</div>
-                        <br />
-                        <br />
-                        <div>{JSON.stringify(enterPressedNotion)}</div> */}
+                      <br />
+                      <br />
+                      <div>{JSON.stringify(enterPressedNotion)}</div> */}
 
               {isNotionEditorActive && (
                 <RichTextEditor
@@ -817,17 +796,17 @@ function CreationEditor({ params }) {
                     dangerouslySetInnerHTML={{ __html: renderingHtml }}
                   ></div>
                   {/* {!isNotionEditorActive &&
-                    Object.keys(editorContents).map((editorId) => (
-                      <div
-                        key={editorId}
-                        dangerouslySetInnerHTML={{
-                          __html: editorContents[editorId],
-                        }}
-                      />
-                    ))} */}
+              Object.keys(editorContents).map((editorId) => (
+                <div
+                  key={editorId}
+                  dangerouslySetInnerHTML={{
+                    __html: editorContents[editorId],
+                  }}
+                />
+              ))} */}
                   {/* {!isNotionEditorActive && (
-                      <div dangerouslySetInnerHTML={{ __html: richTextValue }}> </div>      
-                    )} */}
+              <div dangerouslySetInnerHTML={{ __html: richTextValue }}> </div>
+            )} */}
                   {/* dangerouslySetInnerHTML={{ __html: richTextValue }} */}
                 </div>
               </div>
@@ -847,5 +826,3 @@ function CreationEditor({ params }) {
     </div>
   );
 }
-
-export default CreationEditor;

@@ -11,10 +11,6 @@ interface User {
 
 interface UserInfo {
   titre: string;
-  partie: string;
-  chapitre: string;
-  paragraph: string;
-  notion: string;
 }
 
 interface Props {
@@ -23,7 +19,7 @@ interface Props {
 
 interface AuthContextProps {
   user: User | null;
-  userInfo: UserInfo | null;
+  userInfo: UserInfo| null;
   loginDetails: (email: string, token: string) => void;
   logout: () => void;
 }
