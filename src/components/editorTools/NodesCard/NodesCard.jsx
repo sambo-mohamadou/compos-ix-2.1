@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import styles from "../NodesCard/NodesCard.module.css";
 function NodesCard(props) {
-  console.log(
-    props.nodeObject.parent?.substring(0, props.nodeObject.parent.length - 1)
-  );
+  console.log(props.nodeObject);
   const NODEINFOS = [
     {
       nodeType: "DOC",

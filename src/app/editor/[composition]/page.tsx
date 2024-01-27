@@ -493,7 +493,6 @@ function CreationEditor({ params }) {
 
   const [notionsList, setNotionsList] = useState([]);
   useEffect(() => {
-    console.log("ici");
     const getAllNode = () => {
       setNotionsList(
         tableOfContents.filter((node) => node.nodeType === "NOTION")
@@ -748,7 +747,7 @@ function CreationEditor({ params }) {
                         <div>{JSON.stringify(enterPressedNotion)}</div> */}
 
               {isNotionEditorActive && (
-                <RichTextEditor props={handleRichTextChange} />
+                <RichTextEditor handleRichTextChange={handleRichTextChange} />
               )}
               <div className="w-full h-full overflow-hidden bg-white p-4">
                 <div className="html-viewer">
