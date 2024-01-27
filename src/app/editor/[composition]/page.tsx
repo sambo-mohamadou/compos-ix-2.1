@@ -166,7 +166,7 @@ function CreationEditor({ params }) {
   const targetHTMLParseRef = useRef(null);
 
   const handlecloseEditor = () => {
-    // updateNotionHTMLInTOC(DOMPurify.sanitize(htmlEditorContent));
+    updateNotionHTMLInTOC(DOMPurify.sanitize(htmlEditorContent));
     setIsNotionEditorActive(false);
   };
   const parseStringToHTML = (htmlString) => {
@@ -215,11 +215,21 @@ function CreationEditor({ params }) {
   };
 
   const updateNotionHTMLInTOC = (htmlString) => {
+    console.log(htmlString, enterPressedNotion)
     let tempTOC = [...tableOfContents];
     setTableOfcontents([]);
     tempTOC[enterPressedNotion.index].htmlContent = htmlString;
+    console.log(tempTOC[enterPressedNotion.index]);
     setTableOfcontents(tempTOC);
   };
+  // const updateEditedNodeTitle = (nodeInfo) => {
+  //   if (nodeInfo) {
+  //     setSelectedNode(nodeInfo);
+  //     let tempTOC = [...tableOfContents];
+  //     setTableOfcontents([]);
+  //     tempTOC[nodeInfo.index].nodeTitle = nodeInfo.nodeTitle;
+  //     setTableOfcontents(tempTOC);
+  //   }
 
   const setAddNodeTypes = (selectedNode) => {
     switch (selectedNode.nodeType) {
@@ -528,7 +538,6 @@ function CreationEditor({ params }) {
 
   const [notionsList, setNotionsList] = useState([]);
   useEffect(() => {
-    console.log('ici');
     const getAllNode = () => {
       setNotionsList(
         tableOfContents.filter((node) => node.nodeType === 'NOTION')
@@ -782,15 +791,8 @@ function CreationEditor({ params }) {
                         <br />
                         <div>{JSON.stringify(enterPressedNotion)}</div> */}
 
-              {isNotionEditorActive && activeNotion && (
-                <RichTextEditor
-                  key={activeNotion}
-                  id={activeNotion}
-                  onContentChange={(content) =>
-                    handleEditorContentChange(activeNotion, content)
-                  }
-                />
-                //  props={handleRichTextChange}
+              {isNotionEditorActive && (
+                <RichTextEditor props={handleRichTextChange} chandleEditorContent={setHtmlEditorContent} editorContent = {tableOfContents[enterPressedNotion.index]}/>
               )}
               <div className="w-full h-full overflow-hidden bg-white p-4">
                 <div className="html-viewer">
