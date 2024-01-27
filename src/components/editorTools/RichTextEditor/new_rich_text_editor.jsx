@@ -4,8 +4,12 @@ import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 
 
-const RichTextEditor = ({props}) => {
-  const [textValue, setTextValue] = useState("");
+const RichTextEditor = ({props,chandleEditorContent, editorContent}) => {
+  
+  const sanitizedDefaultHtml = DOMPurify.sanitize(editorContent.htmlContent, {
+    USE_PROFILES: { html: true },
+  });
+  const [textValue, setTextValue] = useState(sanitizedDefaultHtml);
 
   const handleTextChange = (value) => {
     // Sanitize the HTML before setting it as the state
@@ -14,7 +18,8 @@ const RichTextEditor = ({props}) => {
     });
     console.log(sanitizedHtml);
     setTextValue(sanitizedHtml);
-    props(sanitizedHtml); // Pass the sanitized HTML to the parent or other components
+    chandleEditorContent(value);
+    // props(sanitizedHtml); // Pass the sanitized HTML to the parent or other components
   };
   const handleChange = (content, delta, source, editor) => {
     setTextValue(content);
