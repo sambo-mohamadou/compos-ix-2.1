@@ -4,28 +4,38 @@ import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 
 
-const RichTextEditor = ({props}) => {
+const RichTextEditor = ({ id, onContentChange}) => {
   const [textValue, setTextValue] = useState("");
+  const [editorState, setEditorState] = useState()
 
-  const handleTextChange = (value) => {
-    // Sanitize the HTML before setting it as the state
-    const sanitizedHtml = DOMPurify.sanitize(value, {
+  console.log('last try', id)
+ 
+
+  
+
+
+  const handleTextChange = (content) => {
+    const sanitizedHtml = DOMPurify.sanitize(content, {
       USE_PROFILES: { html: true },
-    });
-    console.log(sanitizedHtml);
+    }); 
+
+  
     setTextValue(sanitizedHtml);
-    props(sanitizedHtml); // Pass the sanitized HTML to the parent or other components
-  };
-  const handleChange = (content, delta, source, editor) => {
-    setTextValue(content);
-    props.setHtmlEditorContent(content);
+   
+    onContentChange(content); // Pass the sanitized HTML to the parent or other components
   };
 
-  return (
-    <div>
-      <ReactQuill value={textValue} theme="snow" onChange={handleTextChange}/>{" "}
-    </div>
-  );
+  // useEffect(() => {
+  //    setEditorState(id)
+  // }, [id]);
+
+  return id? (
+   
+      <div>
+        <ReactQuill value={textValue} theme="snow" onChange={handleTextChange}/>{" "}
+      </div>
+
+  ): null;
 };
 
 export default RichTextEditor;
