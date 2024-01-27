@@ -19,6 +19,7 @@ const RichTextEditor = ({props,chandleEditorContent, editorContent}) => {
   
     setTextValue(sanitizedHtml);
     chandleEditorContent(value);
+    //Décommenter la ligne suivante en cas de problème
     // props(sanitizedHtml); // Pass the sanitized HTML to the parent or other components
   };
 

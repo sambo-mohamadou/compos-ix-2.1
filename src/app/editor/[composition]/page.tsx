@@ -781,7 +781,7 @@ function CreationEditor({ params }) {
                     style={{ padding: '6px 12px', color: 'white' }}
                     className="bg-blue-500 rounded-md hover:bg-blue-600"
                   >
-                    Enregristrez
+                    Enregistrez
                   </button>
                 </div>
               )}
@@ -842,7 +842,8 @@ function CreationEditor({ params }) {
             notionsList={notionsList}
             documentTitle={params.composition}
           />
-        )}
+        )
+        }
       </div>
     </div>
   );
