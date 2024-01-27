@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import styles from "../NodesCard/NodesCard.module.css"
+import styles from "../NodesCard/NodesCard.module.css";
 function NodesCard(props) {
-  console.log(props.nodeObject.parent?.substring(0,props.nodeObject.parent.length-1));
+  console.log(
+    props.nodeObject.parent?.substring(0, props.nodeObject.parent.length - 1)
+  );
   const NODEINFOS = [
     {
       nodeType: "DOC",
@@ -46,7 +48,7 @@ function NodesCard(props) {
           textColor: "white",
         }
   );
-        console.log(nodeElement);
+  console.log(nodeElement);
   const [nodeTitle, setNodeTitle] = useState(nodeObject.nodeTitle);
 
   const [isClicked, setIsClicked] = useState(false);
@@ -111,42 +113,51 @@ function NodesCard(props) {
       }
     }
   };
-//Gestion de l'indentation de la table de contenu (sidebar)
-//On applique divers style en fonction du noeud parent
-  const setMargin = (nodeObject)=>{
-    let css= ""
-    switch (props.nodeObject.parent?.substring(0,props.nodeObject.parent.length-1)){
+  //Gestion de l'indentation de la table de contenu (sidebar)
+  //On applique divers style en fonction du noeud parent
+  const setMargin = (nodeObject) => {
+    let css = "";
+    /*Faut-il Empêcher que les ntions puisse créer d'autres notions 
+    (empêcher que le clique sur notion propose de crérr une autre notion */
+    switch (
+      props.nodeObject.parent?.substring(0, props.nodeObject.parent.length - 1)
+    ) {
       case "No":
-        css="notion";
+        css = "notion";
         break;
       case "Pt":
-        css ="chapter";
+        css = "chapter";
         break;
       case "Pr":
-        css="notion";
+        css = "notion";
         break;
       case "Ch":
-        css="paragraph";
+        css = "paragraph";
+        break;
+      case "Co":
+        css = "part";
         break;
       default:
-        css="independentNotion";
+        css = "independantNotion";
     }
     return styles[css];
-  }
+  };
 
   return (
     <button
       onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
-      className={`p-[6px] flex flex-row gap-[5px] items-baseline rounded-lg ${setMargin(props.nodeObject)}`}
+      className={`p-[6px] flex flex-row gap-[5px] items-baseline rounded-lg ${setMargin(
+        props.nodeObject
+      )}`}
       style={{
         width: "100%",
         backgroundColor: `${nodeBgColor}`,
         boxShadow:
           "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
       }}
-      >
+    >
       <span
-      onClick={() => handleNodeOnClick()}
+        onClick={() => handleNodeOnClick()}
         on
         style={{
           fontWeight: "bold",
