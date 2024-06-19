@@ -5,12 +5,13 @@ import styles from '@/styles/Home.module.css'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function Home() {
+  // const {user, userInfo} = useAuth();
 
   const redirect = () => {
       const currentLink = window.location.href
       window.location.href = `${currentLink}/loginSignup`
   }
-  const {user, userInfo} = useAuth();
+  
   return (
     <div>
       <Head>

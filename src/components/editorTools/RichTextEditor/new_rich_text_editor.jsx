@@ -11,29 +11,27 @@ const RichTextEditor = ({props,chandleEditorContent, editorContent}) => {
   });
   const [textValue, setTextValue] = useState(sanitizedDefaultHtml);
 
-  const handleTextChange = (content) => {
-    const sanitizedHtml = DOMPurify.sanitize(content, {
+  const handleTextChange = (value) => {
+    // Sanitize the HTML before setting it as the state
+    const sanitizedHtml = DOMPurify.sanitize(value, {
       USE_PROFILES: { html: true },
-    }); 
-
-  
+    });
+    console.log(sanitizedHtml);
     setTextValue(sanitizedHtml);
     chandleEditorContent(value);
     //Décommenter la ligne suivante en cas de problème
     // props(sanitizedHtml); // Pass the sanitized HTML to the parent or other components
   };
+  const handleChange = (content, delta, source, editor) => {
+    setTextValue(content);
+    props.setHtmlEditorContent(content);
+  };
 
-  // useEffect(() => {
-  //    setEditorState(id)
-  // }, [id]);
-
-  return  (
-   
-      <div>
-        <ReactQuill value={textValue} theme="snow" onChange={handleTextChange}/>{" "}
-      </div>
-
-  )
+  return (
+    <div>
+      <ReactQuill value={textValue} theme="snow" onChange={handleTextChange}/>{" "}
+    </div>
+  );
 };
 
 export default RichTextEditor;

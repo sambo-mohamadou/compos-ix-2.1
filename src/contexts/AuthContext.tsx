@@ -20,6 +20,7 @@ interface Props {
 interface AuthContextProps {
   user: User | null;
   userInfo: UserInfo| null;
+  userLoggedIn: Boolean | null;
   loginDetails: (email: string, token: string) => void;
   logout: () => void;
 }
@@ -27,6 +28,7 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({
   user: null,
   userInfo: null,
+  userLoggedIn: null,
   loginDetails: (email, token) => {
     console.log('logOut details');
   },
@@ -38,6 +40,7 @@ const AuthContext = createContext<AuthContextProps>({
 export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User | null>(null);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
 
   // useEffect(() => {
   //   if (user && user.email && user.token) {
@@ -47,26 +50,27 @@ export const AuthProvider = ({ children }: Props) => {
 
   const loginDetails = (email: string, token: string) => {
     setUser({ email, token });
-    fetchUserInfo(token, email);
+    setUserLoggedIn(true);
+    // fetchUserInfo(token, email);
   };
 
-  const fetchUserInfo = async (token: string, email: string) => {
-    try {
-      const response = await axios.get(apiTitles + email, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          withCredentials: false,
-        },
-      });
-      if (response.data.success === true) {
-        setUserInfo(response.data);
-      } else {
-        console.error('Error getting user info', response.data.error);
-      }
-    } catch (error) {
-      console.error('Error fetching user information:', error);
-    }
-  };
+  // const fetchUserInfo = async (token: string, email: string) => {
+  //   try {
+  //     const response = await axios.get(apiTitles + email, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         withCredentials: false,
+  //       },
+  //     });
+  //     if (response.data.success === true) {
+  //       setUserInfo(response.data);
+  //     } else {
+  //       console.error('Error getting user info', response.data.error);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching user information:', error);
+  //   }
+  // };
 
   const logout = () => {
     setUser(null);
@@ -74,7 +78,7 @@ export const AuthProvider = ({ children }: Props) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, userInfo, loginDetails, logout }}>
+    <AuthContext.Provider value={{ user, userInfo, loginDetails, logout, userLoggedIn }}>
       {children}
     </AuthContext.Provider>
   );

@@ -15,7 +15,7 @@ import {
 } from '../../../components/editorTools';
 import axios from 'axios';
 import { apiTitlesSend } from '../../api/app';
-import { createEmptyNotion } from './page';
+import { createEmptyNotion } from './old_page';
 
 export function CreationEditor({ params }) {
   interface EditorContents {
