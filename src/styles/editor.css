@@ -10,8 +10,8 @@
   justify-content: center;
   align-items: center;
 }
-.notion-finder-width{
-    width: 600px !important;
+.notion-finder-width {
+  width: 600px !important;
 }
 .modal-container {
   background-color: white;
@@ -118,4 +118,21 @@ label {
     width: 0;
     background: transparent;
   }
+}
+
+.tree {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  /*justify-content: space-between;*/
+  background-color: #fff;
+  border-radius: 2rem;
+  overflow: auto;
+  padding: 0 2rem;
+}
+
+.cours-title {
+  font-size: larger;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  padding: 1rem;
 }
