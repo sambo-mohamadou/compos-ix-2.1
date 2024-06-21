@@ -9,7 +9,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import htmlToPdfmake from "html-to-pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
-import { generateDocx } from "./word-saver";
+import { generateDocx } from "./file-saver";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -510,7 +510,7 @@ function CreationEditor({ params }) {
     };
     getAllNode();
   }, [tableOfContents]);
-
+  console.log("Dans page, isClicked: ",selectedNode.isClicked)
   return (
     <div className="overflow-hidden w-full h-screen flex flex-col justify-between items-start">
       <Header />
@@ -779,7 +779,6 @@ function CreationEditor({ params }) {
           <NotionFinder
             addNodeTitle={addNodeTitle}
             richTextValue={richTextValue}
-            notionsList={notionsList}
             documentTitle={params.composition}
           />
         )
