@@ -1,31 +1,35 @@
 import React, { useState } from "react";
 import styles from "../NodesCard/NodesCard.module.css";
-import { FaChevronRight, FaChevronDown } from "react-icons/fa";
 function NodesCard(props) {
   console.log(props.nodeObject);
   const NODEINFOS = [
     {
       nodeType: "DOC",
+      nodeInitial: "Co",
       nodeColor: "#4285F4",
       textColor: "white",
     },
     {
       nodeType: "PART",
+      nodeInitial: "Pt",
       nodeColor: "#34A853",
       textColor: "white",
     },
     {
       nodeType: "CHAPTER",
+      nodeInitial: "Ch",
       nodeColor: "#FBBC05",
       textColor: "white",
     },
     {
       nodeType: "PARAGRAPH",
+      nodeInitial: "Pr",
       nodeColor: "#EA4335",
       textColor: "white",
     },
     {
       nodeType: "NOTION",
+      nodeInitial: "No",
       nodeColor: "#E2EBF9",
       textColor: "#4285F4",
     },
@@ -37,6 +41,7 @@ function NodesCard(props) {
       ? NODEINFOS.find((node) => node.nodeType === nodeObject.nodeType)
       : {
           nodeType: "DOC",
+          nodeInitial: "Co",
           nodeColor: "#4285F4",
           textColor: "white",
         }
@@ -45,7 +50,6 @@ function NodesCard(props) {
   const [nodeTitle, setNodeTitle] = useState(nodeObject.nodeTitle);
 
   const [isClicked, setIsClicked] = useState(false);
-  const [isChevronClicked, setIsChevronClicked] = useState(false);
   const [isEnterPressed, setIsEnterPressed] = useState(false);
 
   const [nodeBgColor, setNodeBgColor] = useState("white");
@@ -55,7 +59,7 @@ function NodesCard(props) {
 
   const handleNodeOnClick = () => {
     setIsClicked(!isClicked);
-    console.log("Après clic: ",isClicked);
+    console.log(isClicked);
     if (isClicked) {
       // When I click once on the node card, I enable the selected node card
       setNodeBgColor(nodeColor);
@@ -136,31 +140,39 @@ function NodesCard(props) {
     }
     return styles[css];
   };
-  // console.log(isChevronClicked);
-  console.log("Plus de Clog ici ;isClicked ",isClicked);
+
   return (
     <button
       onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
-      className={`node-item ${setMargin(props.nodeObject)}`}
+      className={`p-[6px] flex flex-row gap-[5px] items-baseline rounded-lg ${setMargin(
+        props.nodeObject
+      )}`}
+      style={{
+        width: "100%",
+        backgroundColor: `${nodeBgColor}`,
+        boxShadow:
+          "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
+      }}
     >
-      {isChevronClicked ? (
-        <FaChevronDown
-          className="node-chevron"
-          onClick={() => setIsChevronClicked(!isChevronClicked)}
-        />
-      ) : (
-        <FaChevronRight
-          className="node-chevron"
-          onClick={() => setIsChevronClicked(!isChevronClicked)}
-        />
-      )}
-
+      <span
+        onClick={() => handleNodeOnClick()}
+        on
+        style={{
+          fontWeight: "bold",
+          padding: "2px 5px",
+          borderRadius: 100,
+          textAlign: "center",
+          backgroundColor: `${nodeColor}`,
+          color: `${textColor}`,
+        }}
+      >
+        {nodeElement.nodeInitial}
+      </span>
       <input
         className="focus:outline-none break-words w-full hover:break-words"
         style={{ color: `${titleColor}`, backgroundColor: `${nodeBgColor}` }}
         value={nodeTitle}
         onChange={(e) => setNodeTitle(e.target.value)}
-        onClick={handleNodeOnClick}
         onBlur={() =>
           props.updateNode({
             index: props.index,

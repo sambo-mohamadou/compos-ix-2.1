@@ -128,11 +128,22 @@ label {
   background-color: #fff;
   border-radius: 2rem;
   overflow: auto;
-  padding: 0 2rem;
+  padding: 0 0.4rem;
+  align-items: center;
+  align-content: center;
+  vertical-align: center;
 }
 
-.cours-title {
-  font-size: larger;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  padding: 1rem;
+.node-item {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0.2rem;
+  vertical-align: center;
+}
+.node-chevron {
+  font-weight: bold;
+  border-radius: 100;
+  color: #515151;
+  margin: 0.4rem 0 0 0;
+  font-size: 0.7rem;
 }
