@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import withMT from "@material-tailwind/react/utils/withMT";
-import colors from 'tailwindcss/colors';
+import colors, { gray } from 'tailwindcss/colors';
 
 module.exports = withMT({
   content: [
@@ -18,7 +18,10 @@ module.exports = withMT({
         googleRed: '#EA4335',
         googleYellow: '#FBBC05',
         googleBlue: '#4285F4',
+        customGray: '#ccc',
         lightBlue: '#E2EBF9',
+        shadeGray: 'rgb(239, 239, 238)',
+        gray: colors.gray,
       },
     },
   },
