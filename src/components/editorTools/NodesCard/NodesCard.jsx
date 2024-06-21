@@ -53,6 +53,34 @@ function NodesCard(props) {
   const [textColor, setTextColor] = useState(nodeElement.textColor);
   const [titleColor, setTitleColor] = useState("black");
 
+  const handleChevronclick = ()=>{
+    setIsChevronClicked(!isChevronClicked);
+    props.nodeObject.map((item,index)=>{
+      const children = props.nodeObject.filter((element,id)=>(
+        item.nodeLevel==element.parent
+      ));
+      if(!isChevronClicked){
+        for(const child of children){
+          child.isChevronClicked=false;
+        }
+      }
+    })
+  }
+
+  useEffect(()=>{
+    props.setSelectedNode({
+      index: props.index,
+      nodeType: nodeElement.nodeType,
+      nodeTitle: nodeTitle,
+      parent: nodeObject.parent,
+      nodeLevel: nodeObject.nodeLevel,
+      htmlContent: nodeObject.htmlContent,
+      isClicked: isClicked,
+      isChevronClicked: isChevronClicked,
+      isEnterPressed: isEnterPressed,
+    });
+  },[isChevronClicked])
+
   const handleNodeOnClick = () => {
     setIsClicked(!isClicked);
     console.log("Après clic: ",isClicked);
@@ -80,6 +108,7 @@ function NodesCard(props) {
       nodeLevel: nodeObject.nodeLevel,
       htmlContent: nodeObject.htmlContent,
       isClicked: isClicked,
+      isChevronClicked: isChevronClicked,
       isEnterPressed: isEnterPressed,
     });
   };
@@ -137,7 +166,7 @@ function NodesCard(props) {
     return styles[css];
   };
   // console.log(isChevronClicked);
-  console.log("Plus de Clog ici ;isClicked ",isClicked);
+  console.log("Plus de Clog ici ;isClicked ",isClicked, " isChevronClicked",isChevronClicked);
   return (
     <button
       onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
@@ -146,12 +175,12 @@ function NodesCard(props) {
       {isChevronClicked ? (
         <FaChevronDown
           className="node-chevron"
-          onClick={() => setIsChevronClicked(!isChevronClicked)}
+          onClick={handleChevronclick}
         />
       ) : (
         <FaChevronRight
           className="node-chevron"
-          onClick={() => setIsChevronClicked(!isChevronClicked)}
+          onClick={handleChevronclick}
         />
       )}
 
