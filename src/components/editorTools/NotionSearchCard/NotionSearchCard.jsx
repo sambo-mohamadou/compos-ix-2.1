@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import styles from './NotionSearchCard.module.css'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
+/* import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+ */
 function NotionSearchCard(props) {
     
    

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../NodesCard/NodesCard.module.css";
 import { FaChevronRight, FaChevronDown } from "react-icons/fa";
 function NodesCard(props) {
@@ -39,6 +39,7 @@ function NodesCard(props) {
           nodeType: "DOC",
           nodeColor: "#4285F4",
           textColor: "white",
+          isChevronClicked:true,
         }
   );
   console.log(nodeElement);
@@ -53,21 +54,19 @@ function NodesCard(props) {
   const [textColor, setTextColor] = useState(nodeElement.textColor);
   const [titleColor, setTitleColor] = useState("black");
 
-  const handleChevronclick = ()=>{
+  const handleChevronclick = () => {
+    console.log("Ici,ici,ici");
     setIsChevronClicked(!isChevronClicked);
-    props.nodeObject.map((item,index)=>{
-      const children = props.nodeObject.filter((element,id)=>(
-        item.nodeLevel==element.parent
-      ));
-      if(!isChevronClicked){
-        for(const child of children){
-          child.isChevronClicked=false;
-        }
-      }
-    })
-  }
+    const children = props.allNodes.filter(
+      (element, id) => props.nodeObject.nodeLevel == element.parent
+    );
+    console.log("children: ", children);
+    for (const child of children) {
+      child.isChevronClicked = isChevronClicked;
+    }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     props.setSelectedNode({
       index: props.index,
       nodeType: nodeElement.nodeType,
@@ -79,11 +78,11 @@ function NodesCard(props) {
       isChevronClicked: isChevronClicked,
       isEnterPressed: isEnterPressed,
     });
-  },[isChevronClicked])
+  }, [isChevronClicked]);
 
   const handleNodeOnClick = () => {
     setIsClicked(!isClicked);
-    console.log("Après clic: ",isClicked);
+    console.log("Après clic: ", isClicked);
     if (isClicked) {
       // When I click once on the node card, I enable the selected node card
       setNodeBgColor(nodeColor);
@@ -165,45 +164,59 @@ function NodesCard(props) {
     }
     return styles[css];
   };
-  // console.log(isChevronClicked);
-  console.log("Plus de Clog ici ;isClicked ",isClicked, " isChevronClicked",isChevronClicked);
+  console.log(
+    "Plus de Clog ici ;isClicked ",
+    isClicked,
+    " isChevronClicked",
+    isChevronClicked
+  );
   return (
-    <button
-      onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
-      className={`node-item ${setMargin(props.nodeObject)}`}
-    >
-      {isChevronClicked ? (
-        <FaChevronDown
-          className="node-chevron"
-          onClick={handleChevronclick}
-        />
-      ) : (
-        <FaChevronRight
-          className="node-chevron"
-          onClick={handleChevronclick}
-        />
-      )}
+    <>
+      {nodeObject.isChevronClicked ? (
+        <button
+          onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
+          className={`node-item ${setMargin(props.nodeObject)}`}
+        >
+          {console.log("This Node:", nodeObject)}
+          {nodeObject.isChevronClicked ? (
+            <FaChevronDown
+              className="node-chevron"
+              onClick={handleChevronclick}
+            />
+          ) : (
+            <FaChevronRight
+              className="node-chevron"
+              onClick={handleChevronclick}
+            />
+          )}
 
-      <input
-        className="focus:outline-none break-words w-full hover:break-words"
-        style={{ color: `${titleColor}`, backgroundColor: `${nodeBgColor}` }}
-        value={nodeTitle}
-        onChange={(e) => setNodeTitle(e.target.value)}
-        onClick={handleNodeOnClick}
-        onBlur={() =>
-          props.updateNode({
-            index: props.index,
-            nodeType: nodeElement.nodeType,
-            nodeTitle: nodeTitle,
-            parent: nodeObject.parent,
-            nodeLevel: nodeObject.nodeLevel,
-            htmlContent: nodeObject.htmlContent,
-            isClicked: isClicked,
-            isEnterPressed: isEnterPressed,
-          })
-        }
-      />
-    </button>
+          <input
+            className="focus:outline-none break-words w-full hover:break-words"
+            style={{
+              color: `${titleColor}`,
+              backgroundColor: `${nodeBgColor}`,
+            }}
+            value={nodeTitle}
+            onChange={(e) => setNodeTitle(e.target.value)}
+            onClick={handleNodeOnClick}
+            onBlur={() =>
+              props.updateNode({
+                index: props.index,
+                nodeType: nodeElement.nodeType,
+                nodeTitle: nodeTitle,
+                parent: nodeObject.parent,
+                nodeLevel: nodeObject.nodeLevel,
+                htmlContent: nodeObject.htmlContent,
+                isClicked: isClicked,
+                isEnterPressed: isEnterPressed,
+              })
+            }
+          />
+        </button>
+      ) : (
+        ""
+      )}
+    </>
   );
 }
 
