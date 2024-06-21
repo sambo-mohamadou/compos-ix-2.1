@@ -9,8 +9,20 @@ import Image from 'next/image';
 import { CiSearch } from 'react-icons/ci';
 import React from 'react';
 import ChatBotArea from '@/src/components/ChatBotArea';
+import "../../../styles/editor.css";
+import { NodesCard } from "@/src/components/editorTools";
+import { AiOutlinePlus } from "react-icons/ai";
 
-const page = () => {
+const createEmptyNotion = () => {
+  return {
+    id: new Date().getTime(), // Unique identifier for each Notion
+    content: "",
+    editorOpen: true,
+  };
+};
+
+const EditorPage = ({ params }) => {
+  //States for the width sizes
   const [minWidth, maxWidth, defaultWidth] = [300, 500, 350];
   const [minWidth2, maxWidth2, defaultWidth2] = [50, 500, 350];
   const [width, setWidth] = useState(defaultWidth);
