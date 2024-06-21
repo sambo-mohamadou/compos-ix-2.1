@@ -39,14 +39,13 @@ function NodesCard(props) {
           nodeType: "DOC",
           nodeColor: "#4285F4",
           textColor: "white",
-          isChevronClicked:true,
         }
   );
   console.log(nodeElement);
   const [nodeTitle, setNodeTitle] = useState(nodeObject.nodeTitle);
 
   const [isClicked, setIsClicked] = useState(false);
-  const [isChevronClicked, setIsChevronClicked] = useState(false);
+  const [isChevronClicked, setIsChevronClicked] = useState(true);
   const [isEnterPressed, setIsEnterPressed] = useState(false);
 
   const [nodeBgColor, setNodeBgColor] = useState("white");
@@ -57,13 +56,13 @@ function NodesCard(props) {
   const handleChevronclick = () => {
     console.log("Ici,ici,ici");
     setIsChevronClicked(!isChevronClicked);
-    const children = props.allNodes.filter(
-      (element, id) => props.nodeObject.nodeLevel == element.parent
+    /*  const children = props.allNodes.filter(
+      (element, id) => nodeObject.nodeLevel == element.parent
     );
     console.log("children: ", children);
     for (const child of children) {
       child.isChevronClicked = isChevronClicked;
-    }
+    } */
   };
 
   useEffect(() => {
@@ -141,9 +140,7 @@ function NodesCard(props) {
     let css = "";
     /*Faut-il Empêcher que les ntions puisse créer d'autres notions 
     (empêcher que le clique sur notion propose de crérr une autre notion */
-    switch (
-      props.nodeObject.parent?.substring(0, props.nodeObject.parent.length - 1)
-    ) {
+    switch (nodeObject.parent?.substring(0, nodeObject.parent.length - 1)) {
       case "No":
         css = "notion";
         break;
@@ -172,50 +169,55 @@ function NodesCard(props) {
   );
   return (
     <>
-      {nodeObject.isChevronClicked ? (
-        <button
-          onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
-          className={`node-item ${setMargin(props.nodeObject)}`}
-        >
-          {console.log("This Node:", nodeObject)}
-          {nodeObject.isChevronClicked ? (
-            <FaChevronDown
-              className="node-chevron"
-              onClick={handleChevronclick}
+      {console.log("allNodes: ",props.allNodes)}
+      {
+        nodeObject.nodeType == "DOC" ||
+      props.allNodes.find((item, index) => item.nodeLevel == nodeObject.parent)
+        .isChevronClicked == true  ? (
+          <button
+            onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
+            className={`node-item ${setMargin(nodeObject)}`}
+          >
+            {console.log("This Node:", nodeObject)}
+            {/*Ici, on affiche seulement ssi  */}{" "}
+            {nodeObject.isChevronClicked ? (
+              <FaChevronDown
+                className="node-chevron"
+                onClick={handleChevronclick}
+              />
+            ) : (
+              <FaChevronRight
+                className="node-chevron"
+                onClick={handleChevronclick}
+              />
+            )}
+            <input
+              className="focus:outline-none break-words w-full hover:break-words"
+              style={{
+                color: `${titleColor}`,
+                backgroundColor: `${nodeBgColor}`,
+              }}
+              value={nodeTitle}
+              onChange={(e) => setNodeTitle(e.target.value)}
+              onClick={handleNodeOnClick}
+              onBlur={() =>
+                props.updateNode({
+                  index: props.index,
+                  nodeType: nodeElement.nodeType,
+                  nodeTitle: nodeTitle,
+                  parent: nodeObject.parent,
+                  nodeLevel: nodeObject.nodeLevel,
+                  htmlContent: nodeObject.htmlContent,
+                  isClicked: isClicked,
+                  isEnterPressed: isEnterPressed,
+                })
+              }
             />
-          ) : (
-            <FaChevronRight
-              className="node-chevron"
-              onClick={handleChevronclick}
-            />
-          )}
-
-          <input
-            className="focus:outline-none break-words w-full hover:break-words"
-            style={{
-              color: `${titleColor}`,
-              backgroundColor: `${nodeBgColor}`,
-            }}
-            value={nodeTitle}
-            onChange={(e) => setNodeTitle(e.target.value)}
-            onClick={handleNodeOnClick}
-            onBlur={() =>
-              props.updateNode({
-                index: props.index,
-                nodeType: nodeElement.nodeType,
-                nodeTitle: nodeTitle,
-                parent: nodeObject.parent,
-                nodeLevel: nodeObject.nodeLevel,
-                htmlContent: nodeObject.htmlContent,
-                isClicked: isClicked,
-                isEnterPressed: isEnterPressed,
-              })
-            }
-          />
-        </button>
-      ) : (
-        ""
-      )}
+          </button>
+        ) : (
+          ""
+        )
+      }
     </>
   );
 }
