@@ -39,14 +39,13 @@ function NodesCard(props) {
           nodeType: "DOC",
           nodeColor: "#4285F4",
           textColor: "white",
-          isChevronClicked:true,
         }
   );
   console.log(nodeElement);
   const [nodeTitle, setNodeTitle] = useState(nodeObject.nodeTitle);
 
   const [isClicked, setIsClicked] = useState(false);
-  const [isChevronClicked, setIsChevronClicked] = useState(false);
+  const [isChevronClicked, setIsChevronClicked] = useState(true);
   const [isEnterPressed, setIsEnterPressed] = useState(false);
 
   const [nodeBgColor, setNodeBgColor] = useState("white");
@@ -56,13 +55,25 @@ function NodesCard(props) {
 
   const handleChevronclick = () => {
     console.log("Ici,ici,ici");
+    /* Ici, on met la propriété isChevronClicked de l'élément cliqué à 
+    false et on fait de même avec ses éléments enfants 
+    (qui on la propriété parent égal à la propriété nodeLevel 
+      de l'élément actuel) pour cacher leurs éléments enfants aussi */
     setIsChevronClicked(!isChevronClicked);
     const children = props.allNodes.filter(
-      (element, id) => props.nodeObject.nodeLevel == element.parent
+      (element, id) => nodeObject.nodeLevel == element.parent
     );
     console.log("children: ", children);
-    for (const child of children) {
-      child.isChevronClicked = isChevronClicked;
+    /*Car le changement à false n'a pas encore éffectuer 
+    or la présence dans cette fonction signifie qu'on a cliqué 
+    sur le chevron et donc si la valeur du chevron (qui est encore qu'avant le clic)est true, 
+    cela signifie qu'on veut qu'elle passe à false 
+      */
+    if (nodeObject.isChevronClicked==true) {
+      console.log("changing kids: ")
+      for (const child of children) {
+        child.isChevronClicked = false;
+      }
     }
   };
 
@@ -140,10 +151,8 @@ function NodesCard(props) {
   const setMargin = (nodeObject) => {
     let css = "";
     /*Faut-il Empêcher que les ntions puisse créer d'autres notions 
-    (empêcher que le clique sur notion propose de crérr une autre notion */
-    switch (
-      props.nodeObject.parent?.substring(0, props.nodeObject.parent.length - 1)
-    ) {
+    (empêcher que le clique sur notion propose de créer une autre notion */
+    switch (nodeObject.parent?.substring(0, nodeObject.parent.length - 1)) {
       case "No":
         css = "notion";
         break;
@@ -172,10 +181,15 @@ function NodesCard(props) {
   );
   return (
     <>
-      {nodeObject.isChevronClicked ? (
+      {console.log("allNodes: ", props.allNodes)}
+      {/*Ici, on affiche seulement ssi  c'est lélément racine "DOC" ou si 
+      la propriété isChevronclicked de son parent vaut true */}
+      {nodeObject.nodeType == "DOC" ||
+      props.allNodes.find((item, index) => item.nodeLevel == nodeObject.parent)
+        .isChevronClicked == true ? (
         <button
           onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
-          className={`node-item ${setMargin(props.nodeObject)}`}
+          className={`node-item ${setMargin(nodeObject)}`}
         >
           {console.log("This Node:", nodeObject)}
           {nodeObject.isChevronClicked ? (
@@ -189,7 +203,6 @@ function NodesCard(props) {
               onClick={handleChevronclick}
             />
           )}
-
           <input
             className="focus:outline-none break-words w-full hover:break-words"
             style={{
