@@ -80,7 +80,7 @@ const EditorPage = ({ params }) => {
   const [tableOfContents, setTableOfcontents] = useState([
     {
       nodeType: "DOC",
-      nodeTitle: params.composition,
+      nodeTitle: decodeURIComponent(params.composition),
       nodeLevel: "Co0",
       parent: undefined,
       htmlContent: "",
