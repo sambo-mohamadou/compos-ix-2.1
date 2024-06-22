@@ -64,3 +64,15 @@
 .title_node{
     font-weight: 700;
 }
+.styleplus{
+    background-color:#dddddd;
+    padding: .3rem .2rem;
+    cursor: pointer;
+    border-radius: 24px;
+    width: 95px;
+    text-align: center;
+}
+.styleplus:hover {
+    background-color: #e5e5e5dd;
+    transition: .2s all ease;
+}
