@@ -18,6 +18,9 @@ const page = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [sidebar2visible, setSidebar2visible] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showFullContentIndex, setShowFullContentIndex] = useState<
+    number | null
+  >(null);
 
   const toggleSidebar2Close = () => {
     setSidebar2visible(false);
@@ -246,15 +249,27 @@ const page = () => {
                   </div>
                   {filteredFacts.map((value, index) => (
                     <div
-                      className="bg-gray-100 w-full h-full m-auto mt-4 p-2 overflow-hidden gap-2 flex flex-col "
-                      style={{ borderRadius: 8 }}
+                      className="bg-gray-100 w-full m-auto mt-4 p-2 overflow-auto gap-2 flex flex-col "
+                      style={{ borderRadius: 8, maxHeight: "400px"}}
                       key={index}
                     >
                       <div className="flex border-b border-customGray items-center gap-2">
                         <p className={styles.node_style}>No</p>
                         <p className={styles.title_node}>{value.title}</p>
                       </div>
-                      <p>{value.content}</p>
+                      <p>
+                        {showFullContentIndex === index
+                          ? value.content
+                          : `${value.content.substring(0, 100)}...`}
+                      </p>
+                      {showFullContentIndex !== index && (
+                        <p
+                          className={styles.styleplus}
+                          onClick={() => setShowFullContentIndex(index)}
+                        >
+                         Voir plus
+                        </p>
+                      )}
                     </div>
                   ))}
                 </section>
