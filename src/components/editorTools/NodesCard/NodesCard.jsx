@@ -254,22 +254,26 @@ function NodesCard(props) {
   const handleAddNewNodeToTOC = (AvailableNodeOptions, parent) => {
     /* Add to TOC Logic Here */
     const nodeOptions = AvailableNodeOptions[0];
+    console.log("node options recu:",nodeOptions)
     let tempTOC = [...tableOfContents];
     setTableOfcontents([]);
     setTableOfContentsComponents([]);
-    console.log("nodeOptions in ", nodeOptions);
    /*  tempTOC[selectedNode.index].isClicked = false;
     tempTOC[selectedNode.index].isChevronClicked = true; */
     let title = "";
+    let level = ""
     switch (nodeOptions.nodeType) {
       case "PART":
         title = "Partie";
+        level= "Pt"
         break;
       case "CHAPTER":
         title = "Chapitre";
+        level="Ch"
         break;
       case "NOTION":
         title = "Notion";
+        level = "No";
         break;
     }
     const newNode = {
@@ -278,7 +282,7 @@ function NodesCard(props) {
       nodeLevel:
         selectedNode.nodeType !== "NOTION"
           ? `${nodeOptions.nodeInitial}${tempTOC.length}`
-          : `${nodeOptions.nodeLevel}${tempTOC.length}`,
+          : `${level}${tempTOC.length}`,
       parent: `${parent}`,
       htmlContent: "",
       isClicked: false,
