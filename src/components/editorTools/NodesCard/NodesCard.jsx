@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../NodesCard/NodesCard.module.css";
 import { FaChevronRight, FaChevronDown } from "react-icons/fa";
+import { AiOutlinePlus } from "react-icons/ai";
 function NodesCard(props) {
   console.log(props.nodeObject);
   const NODEINFOS = [
@@ -69,8 +70,8 @@ function NodesCard(props) {
     sur le chevron et donc si la valeur du chevron (qui est encore qu'avant le clic)est true, 
     cela signifie qu'on veut qu'elle passe à false 
       */
-    if (nodeObject.isChevronClicked==true) {
-      console.log("changing kids: ")
+    if (nodeObject.isChevronClicked == true) {
+      console.log("changing kids: ");
       for (const child of children) {
         child.isChevronClicked = false;
       }
@@ -187,45 +188,48 @@ function NodesCard(props) {
       {nodeObject.nodeType == "DOC" ||
       props.allNodes.find((item, index) => item.nodeLevel == nodeObject.parent)
         .isChevronClicked == true ? (
-        <button
+        <div
           onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
           className={`node-item ${setMargin(nodeObject)}`}
         >
           {console.log("This Node:", nodeObject)}
-          {nodeObject.isChevronClicked ? (
-            <FaChevronDown
-              className="node-chevron"
-              onClick={handleChevronclick}
+          <div className="flex justify-between gap-2">
+            {nodeObject.isChevronClicked ? (
+              <FaChevronDown
+                className="node-chevron"
+                onClick={handleChevronclick}
+              />
+            ) : (
+              <FaChevronRight
+                className="node-chevron"
+                onClick={handleChevronclick}
+              />
+            )}
+            <input
+              className="focus:outline-none break-words w-full hover:break-words"
+              style={{
+                color: `${titleColor}`,
+                backgroundColor: `${nodeBgColor}`,
+              }}
+              value={nodeTitle}
+              onChange={(e) => setNodeTitle(e.target.value)}
+              onClick={handleNodeOnClick}
+              onBlur={() =>
+                props.updateNode({
+                  index: props.index,
+                  nodeType: nodeElement.nodeType,
+                  nodeTitle: nodeTitle,
+                  parent: nodeObject.parent,
+                  nodeLevel: nodeObject.nodeLevel,
+                  htmlContent: nodeObject.htmlContent,
+                  isClicked: isClicked,
+                  isEnterPressed: isEnterPressed,
+                })
+              }
             />
-          ) : (
-            <FaChevronRight
-              className="node-chevron"
-              onClick={handleChevronclick}
-            />
-          )}
-          <input
-            className="focus:outline-none break-words w-full hover:break-words"
-            style={{
-              color: `${titleColor}`,
-              backgroundColor: `${nodeBgColor}`,
-            }}
-            value={nodeTitle}
-            onChange={(e) => setNodeTitle(e.target.value)}
-            onClick={handleNodeOnClick}
-            onBlur={() =>
-              props.updateNode({
-                index: props.index,
-                nodeType: nodeElement.nodeType,
-                nodeTitle: nodeTitle,
-                parent: nodeObject.parent,
-                nodeLevel: nodeObject.nodeLevel,
-                htmlContent: nodeObject.htmlContent,
-                isClicked: isClicked,
-                isEnterPressed: isEnterPressed,
-              })
-            }
-          />
-        </button>
+          </div>
+          <AiOutlinePlus size={20} />
+        </div>
       ) : (
         ""
       )}
