@@ -29,6 +29,7 @@ const ChatBotArea: React.FC<YourComponentProps> = ({ onClose }) => {
       msg: "Bienvenue ! Comment puis-je vous aider aujourd'hui ?",
     },
   ]);
+  
   const [chatGemini, setChatGemini] = useState<ChatMessage[]>([
     {
       sender: 'bot',
@@ -125,7 +126,7 @@ const ChatBotArea: React.FC<YourComponentProps> = ({ onClose }) => {
     } else {
       window.alert('Veuillez saisir un message valide');
     }
-    console.log(chatRasa, 'chatRasa');
+    // console.log(chatRasa, 'chatRasa');
   };
 
   const handleKeyDownRasa = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

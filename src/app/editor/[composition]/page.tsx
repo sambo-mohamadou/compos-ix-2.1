@@ -608,13 +608,12 @@ const EditorPage = ({ params }) => {
               <h1
                 style={{
                   color: "black",
-                  backgroundColor: "#E2EBF9",
-                  padding: "8px 4px",
-                  borderRadius: 8,
+                  padding: "12px 4px",
                   fontWeight: "bold",
+                  fontSize: "20px"
                 }}
               >
-                Table of contents
+                Table de matières
               </h1>
 
               <div className="!text-left py-[4px] w-full flex flex-col gap-[4px] pb-5">
