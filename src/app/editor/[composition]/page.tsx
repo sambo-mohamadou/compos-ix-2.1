@@ -1,17 +1,21 @@
-'use client';
-import Header from '@/src/components/Header';
-import { useState, useEffect, useRef } from 'react';
-import star_icon from '@/public/images/star_icon.png';
-import arrow_right_icon from '@/public/images/arrow_next_right_icon.png';
-import arrow_left_icon from '@/public/images/arrow_back_left_icon.png';
-import styles from '@/src/styles/Editor.module.css';
-import Image from 'next/image';
-import { CiSearch } from 'react-icons/ci';
-import React from 'react';
-import ChatBotArea from '@/src/components/ChatBotArea';
+"use client";
+import Header from "@/src/components/Header";
+import { useState, useEffect, useRef } from "react";
+import star_icon from "@/public/images/star_icon.png";
+import arrow_right_icon from "@/public/images/arrow_next_right_icon.png";
+import arrow_left_icon from "@/public/images/arrow_back_left_icon.png";
+import styles from "@/src/styles/Editor.module.css";
+import Image from "next/image";
+import { CiSearch } from "react-icons/ci";
+import React from "react";
+import ChatBotArea from "@/src/components/ChatBotArea";
 import "../../../styles/editor.css";
 import { NodesCard } from "@/src/components/editorTools";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus,AiOutlineSave } from "react-icons/ai";
+import { FaFilePdf, FaFileWord } from "react-icons/fa";
+import htmlToPdfmake from "html-to-pdfmake";
+import { generateDocx } from "./word-saver";
+import {RichTextEditor} from "../../../components/editorTools"
 
 const createEmptyNotion = () => {
   return {
@@ -29,7 +33,7 @@ const EditorPage = ({ params }) => {
   const [width2, setWidth2] = useState(defaultWidth2);
   const [isHovered, setIsHovered] = useState(false);
   const [sidebar2visible, setSidebar2visible] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showFullContentIndex, setShowFullContentIndex] = useState<
     number | null
   >(null);
@@ -37,7 +41,7 @@ const EditorPage = ({ params }) => {
   const toggleSidebar2Close = () => {
     setSidebar2visible(false);
     setWidth2(minWidth2);
-    console.log(width2, sidebar2visible, 'hello');
+    console.log(width2, sidebar2visible, "hello");
   };
   const toggleSideBar2Open = () => {
     setSidebar2visible(true);
@@ -46,7 +50,7 @@ const EditorPage = ({ params }) => {
   const [chatbotVisible, setChatbotVisible] = useState(false);
   const facts = [
     {
-      title: 'La Photosynthèse',
+      title: "La Photosynthèse",
       content:
         "La photosynthèse est un processus utilisé par les plantes et d'autres organismes pour convertir l'énergie lumineuse en énergie chimique. Ce processus se déroule principalement dans les feuilles des plantes grâce à la chlorophylle. En plus de fournir de l'énergie aux plantes, la photosynthèse produit de l'oxygène, essentiel pour la respiration de nombreux organismes.",
     },
@@ -61,12 +65,12 @@ const EditorPage = ({ params }) => {
         "Le Cameroun a été colonisé par l'Allemagne en 1884 avant de passer sous le contrôle franco-britannique après la Première Guerre mondiale. En 1960, le Cameroun français a obtenu son indépendance, suivi par le Cameroun britannique en 1961. Depuis lors, le Cameroun est devenu une république unie et a connu divers défis politiques et économiques.",
     },
     {
-      title: 'Le Fleuve Congo',
+      title: "Le Fleuve Congo",
       content:
         "Le fleuve Congo est le deuxième plus long fleuve d'Afrique et le plus profond du monde. Il traverse plusieurs pays, dont la République du Congo et la République Démocratique du Congo, et est une source vitale d'eau et de transport pour des millions de personnes. Sa biodiversité unique comprend des espèces endémiques telles que les poissons du genre 'Microctenopoma'.",
     },
     {
-      title: 'Les Premières Civilisations',
+      title: "Les Premières Civilisations",
       content:
         "Les premières civilisations humaines, telles que la Mésopotamie et l'Égypte ancienne, ont émergé il y a plus de 5 000 ans. Ces civilisations ont développé des systèmes d'écriture, des structures politiques complexes, et des avancées technologiques significatives qui ont jeté les bases de la civilisation moderne.",
     },
@@ -290,7 +294,6 @@ const EditorPage = ({ params }) => {
     return newChildren;
   };
 
-
   /////Node Functions
   const updateEditedNodeTitle = (nodeInfo) => {
     if (nodeInfo) {
@@ -404,7 +407,6 @@ const EditorPage = ({ params }) => {
     }
   };
 
- 
   const handleAddNewNodeToTOC = (nodeTitle) => {
     setAddNodeTitle(nodeTitle);
     /* Add to TOC Logic Here */
@@ -511,7 +513,7 @@ const EditorPage = ({ params }) => {
           setSelectedNode={setSelectedNodeInTOC}
           selectedNode={selectedNode}
           setEnterPressedNotion={setEnterPressNotionInTOC}
-          allNodes = {newTable}
+          allNodes={newTable}
           setTableOfcontents={setTableOfcontents}
           setTableOfContentsComponents={setTableOfContentsComponents}
           tableOfContents={tableOfContents}
@@ -529,8 +531,65 @@ const EditorPage = ({ params }) => {
     buildLeftCorner(tableOfContents);
   }, [tableOfContents]);
 
+  /////Génération du PDF et du document word
+  const generateDocument = async (title, value) => {
+    return await generateDocx(title, value);
+  };
+
+  const generatePdf = () => {
+    const combinedHtml = `<div>${renderingHtml}</div><div>${richTextValue}</div>`;
+
+    const documentDefinition = {
+      content: htmlToPdfmake(combinedHtml),
+    };
+
+    const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
+
+    // You can open the PDF in a new window or download it
+    pdfDocGenerator.open();
+    // OR
+    // pdfDocGenerator.download('example.pdf');
+  };
+  const handlePdfMouseEnter = () => {
+    setIsPdfHovered(true);
+  };
+
+  const handlePdfMouseLeave = () => {
+    setIsPdfHovered(false);
+  };
+
+  const handleWordMouseEnter = () => {
+    setIsWordHovered(true);
+  };
+
+  const handleWordMouseLeave = () => {
+    setIsWordHovered(false);
+  };
+  /////
+  
+
+  /////Gestion du Rich Text Eitor
+  const handlecloseEditor = () => {
+    updateNotionHTMLInTOC(DOMPurify.sanitize(htmlEditorContent));
+    setIsNotionEditorActive(false);
+  };
+  const updateNotionHTMLInTOC = (htmlString) => {
+    console.log(htmlString, enterPressedNotion)
+    let tempTOC = [...tableOfContents];
+    setTableOfcontents([]);
+    tempTOC[enterPressedNotion.index].htmlContent = htmlString;
+    console.log(tempTOC[enterPressedNotion.index]);
+    setTableOfcontents(tempTOC);
+  };
+
+  /////
   ////////////////////
-  console.log("isClicked, page: ", selectedNode?.isClicked, " isChevronClicked: ",selectedNode?.isChevronClicked);
+  console.log(
+    "isClicked, page: ",
+    selectedNode?.isClicked,
+    " isChevronClicked: ",
+    selectedNode?.isChevronClicked
+  );
   return (
     <div className="bg-slate-100 overflow-hidden w-full h-screen">
       <Header />
@@ -724,9 +783,83 @@ const EditorPage = ({ params }) => {
         </section>
         {/* Main Section  */}
         <section className="w-full bg-white overflow-hidden  relative border-2 rounded-lg mt-2">
-          <div className="">EDITION DES CONTENUS</div>
-          <div className="px-24 py-2 mx-auto h-full overflow-y-auto">
-            <p></p>
+          <div className="w-full h-12 flex items-center justify-between">
+            <h1 className="font-bold text-3xl uppercase">
+              EDITION DE CONTENUS
+            </h1>
+
+            {tableOfContents.length > 1 && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: "5px",
+                }}
+              >
+                <FaFilePdf
+                  size={34}
+                  style={{ color: isPdfHovered ? "#db1a1a" : "#ff0000" }}
+                  cursor="pointer"
+                  onClick={generatePdf}
+                  onMouseEnter={handlePdfMouseEnter}
+                  onMouseLeave={handlePdfMouseLeave}
+                />
+
+                <FaFileWord
+                  size={34}
+                  style={{ color: isWordHovered ? "#1c1cd6" : "#0000FF" }}
+                  cursor="pointer"
+                  onClick={() => {
+                    generateDocument(renderingHtml, richTextValue);
+                    console.log(renderingHtml, richTextValue);
+                  }}
+                  onMouseEnter={handleWordMouseEnter}
+                  onMouseLeave={handleWordMouseLeave}
+                />
+
+                <button
+                  style={{ padding: "6px 12px", color: "white" }}
+                  className="bg-blue-500 rounded-md hover:bg-blue-600"
+                >
+                  Enregistrez
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="w-full relative h-[calc(100%-64px)] overflow-hidden border-[#E2EBF9] px-[2px] border-2 rounded-lg">
+            {isNotionEditorActive && (
+              <div className="w-full px-4 flex justify-end items-center h-[50px] z-50 border relative">
+                <button
+                  onClick={handlecloseEditor}
+                  className="h-8 w-8 absolute right-8 top-14 z-50 flex justify-center items-center border cursor-pointer"
+                >
+                  <AiOutlineSave size={20} />
+                </button>
+              </div>
+            )}
+            <div className="w-full h-full overflow-scroll">
+              {/* <div>{JSON.stringify({tableOfContents})}</div>
+                        <br />
+                        <br />
+                        <div>{JSON.stringify(enterPressedNotion)}</div> */}
+
+              {isNotionEditorActive && (
+                <RichTextEditor props={handleRichTextChange} chandleEditorContent={setHtmlEditorContent} editorContent = {tableOfContents[enterPressedNotion.index]}/>
+              )}
+              <div className="w-full h-full overflow-hidden bg-white p-4">
+                <div className="html-viewer">
+                  <div
+                    dangerouslySetInnerHTML={{ __html: renderingHtml }}
+                  ></div>
+                  {!isNotionEditorActive && (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: richTextValue }}
+                    ></div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
           {/* ChatBot Icon Area */}
           {!chatbotVisible ? (
@@ -749,8 +882,8 @@ const EditorPage = ({ params }) => {
               <div
                 style={{
                   opacity: isHovered ? 1 : 0,
-                  transition: 'opacity 0.5s ease',
-                  visibility: isHovered ? 'visible' : 'hidden',
+                  transition: "opacity 0.5s ease",
+                  visibility: isHovered ? "visible" : "hidden",
                 }}
                 className={styles.description_container}
               >
@@ -822,7 +955,7 @@ const EditorPage = ({ params }) => {
                   {filteredFacts.map((value, index) => (
                     <div
                       className="bg-gray-100 w-full m-auto mt-4 p-2 overflow-auto gap-2 flex flex-col "
-                      style={{ borderRadius: 8, maxHeight: "400px"}}
+                      style={{ borderRadius: 8, maxHeight: "400px" }}
                       key={index}
                     >
                       <div className="flex border-b border-customGray items-center gap-2">
@@ -839,7 +972,7 @@ const EditorPage = ({ params }) => {
                           className={styles.styleplus}
                           onClick={() => setShowFullContentIndex(index)}
                         >
-                         Voir plus
+                          Voir plus
                         </p>
                       )}
                     </div>
