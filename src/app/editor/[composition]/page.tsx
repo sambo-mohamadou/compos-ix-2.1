@@ -16,6 +16,12 @@ import { FaFilePdf, FaFileWord } from "react-icons/fa";
 import htmlToPdfmake from "html-to-pdfmake";
 import { generateDocx } from "./word-saver";
 import {RichTextEditor} from "../../../components/editorTools"
+import DOMPurify from "dompurify";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 
 const createEmptyNotion = () => {
   return {
