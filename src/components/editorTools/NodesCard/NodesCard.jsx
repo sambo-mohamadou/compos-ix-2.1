@@ -219,13 +219,17 @@ function NodesCard(props) {
       case 'CHAPTER':
         return [
           {
-            nodeType: 'PARAGRAPH',
+            nodeType: 'NOTION',
+            nodeInitial: 'No',
+            // nodeColor: '#E2EBF9',
+            nodeColor: '#4285F4',
+            /* nodeType: 'PARAGRAPH',
             nodeInitial: 'Pr',
-            textColor: '#EA4335',
+            textColor: '#EA4335', */
             // textColor: 'white',
           },
         ];
-      case 'PARAGRAPH':
+     /*  case 'PARAGRAPH':
         return [
           {
             nodeType: 'NOTION',
@@ -242,7 +246,7 @@ function NodesCard(props) {
             // nodeColor: '#E2EBF9',
             nodeColor: '#4285F4',
           },
-        ];
+        ]; */
     }
   };
   console.log('addNodeOptions ', addNodeOptions);

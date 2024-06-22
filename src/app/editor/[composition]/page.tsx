@@ -11,17 +11,16 @@ import React from "react";
 import ChatBotArea from "@/src/components/ChatBotArea";
 import "../../../styles/editor.css";
 import { NodesCard } from "@/src/components/editorTools";
-import { AiOutlinePlus,AiOutlineSave } from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineSave } from "react-icons/ai";
 import { FaFilePdf, FaFileWord } from "react-icons/fa";
 import htmlToPdfmake from "html-to-pdfmake";
 import { generateDocx } from "./word-saver";
-import {RichTextEditor} from "../../../components/editorTools"
+import { RichTextEditor } from "../../../components/editorTools";
 import DOMPurify from "dompurify";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 
 const createEmptyNotion = () => {
   return {
@@ -572,7 +571,6 @@ const EditorPage = ({ params }) => {
     setIsWordHovered(false);
   };
   /////
-  
 
   /////Gestion du Rich Text Eitor
   const handlecloseEditor = () => {
@@ -580,7 +578,7 @@ const EditorPage = ({ params }) => {
     setIsNotionEditorActive(false);
   };
   const updateNotionHTMLInTOC = (htmlString) => {
-    console.log(htmlString, enterPressedNotion)
+    console.log(htmlString, enterPressedNotion);
     let tempTOC = [...tableOfContents];
     setTableOfcontents([]);
     tempTOC[enterPressedNotion.index].htmlContent = htmlString;
@@ -610,7 +608,7 @@ const EditorPage = ({ params }) => {
                   color: "black",
                   padding: "12px 4px",
                   fontWeight: "bold",
-                  fontSize: "20px"
+                  fontSize: "20px",
                 }}
               >
                 Table de matières
@@ -849,21 +847,26 @@ const EditorPage = ({ params }) => {
                         <br />
                         <div>{JSON.stringify(enterPressedNotion)}</div> */}
 
-              {isNotionEditorActive && (
-                <RichTextEditor props={handleRichTextChange} chandleEditorContent={setHtmlEditorContent} editorContent = {tableOfContents[enterPressedNotion.index]}/>
-              )}
-              <div className="w-full h-full overflow-hidden bg-white p-4">
-                <div className="html-viewer">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: renderingHtml }}
-                  ></div>
-                  {!isNotionEditorActive && (
+              {isNotionEditorActive ? (
+                <RichTextEditor
+                  props={handleRichTextChange}
+                  chandleEditorContent={setHtmlEditorContent}
+                  editorContent={tableOfContents[enterPressedNotion.index]}
+                />
+              ) : (
+                <div className="w-full h-full overflow-hidden bg-white p-4">
+                  <div className="html-viewer">
                     <div
-                      dangerouslySetInnerHTML={{ __html: richTextValue }}
+                      dangerouslySetInnerHTML={{ __html: renderingHtml }}
                     ></div>
-                  )}
+                    {!isNotionEditorActive && (
+                      <div
+                        dangerouslySetInnerHTML={{ __html: richTextValue }}
+                      ></div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
           {/* ChatBot Icon Area */}
