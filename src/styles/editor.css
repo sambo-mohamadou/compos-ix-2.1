@@ -143,6 +143,7 @@ label {
 .node-chevron {
   font-weight: bold;
   border-radius: 100;
+  width: 100%;
   color: #515151;
   margin: 0.4rem 0 0 0;
   font-size: 0.7rem;

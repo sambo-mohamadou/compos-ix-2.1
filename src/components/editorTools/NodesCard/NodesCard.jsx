@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "../NodesCard/NodesCard.module.css";
-import { FaChevronRight, FaChevronDown, FaEllipsisH } from "react-icons/fa";
+import { FaChevronRight, FaChevronDown, FaTrash } from "react-icons/fa";
 import { AiOutlinePlus } from "react-icons/ai";
 import { width } from "@fortawesome/free-solid-svg-icons/fa0";
 function NodesCard(props) {
@@ -12,8 +12,9 @@ function NodesCard(props) {
     setSelectedNode,
     setTableOfContentsComponents,
     setTableOfcontents,
-    tableOfContents, 
-    sortTOC
+    tableOfContents,
+    sortTOC,
+    insertElementAtPosition,
   } = props;
   const NODEINFOS = [
     {
@@ -102,7 +103,7 @@ function NodesCard(props) {
       isChevronClicked: isChevronClicked,
       isEnterPressed: isEnterPressed,
     });
-  }, [isChevronClicked,isClicked]);
+  }, [isChevronClicked, isClicked]);
 
   const handleNodeOnClick = () => {
     setIsClicked(!isClicked);
@@ -186,109 +187,120 @@ function NodesCard(props) {
     }
     return styles[css];
   };
-  console.log(
+  /* console.log(
     "Plus de Clog ici ;isClicked ",
     isClicked,
     " isChevronClicked",
     isChevronClicked
-  );
+  ); */
 
   /////Add node functions
   const setAddNodeTypes = (selectedNode) => {
     switch (selectedNode.nodeType) {
       case "DOC":
-        setAddNodeOptions([
+        return [
           {
             nodeType: "PART",
             nodeInitial: "Pt",
             nodeColor: "#34A853",
             textColor: "white",
           },
-        ]);
-        break;
+        ];
       case "PART":
-        setAddNodeOptions([
+        return [
           {
             nodeType: "CHAPTER",
             nodeInitial: "Ch",
             nodeColor: "#FBBC05",
             textColor: "white",
           },
-        ]);
-        break;
+        ];
       case "CHAPTER":
-        setAddNodeOptions([
+        return [
           {
             nodeType: "PARAGRAPH",
             nodeInitial: "Pr",
             nodeColor: "#EA4335",
             textColor: "white",
           },
-        ]);
-        break;
+        ];
       case "PARAGRAPH":
-        setAddNodeOptions([
+        return [
           {
             nodeType: "NOTION",
             nodeInitial: "No",
             nodeColor: "#E2EBF9",
             textColor: "#4285F4",
           },
-        ]);
-        break;
+        ];
       default:
-        setAddNodeOptions([
+        return [
           {
             nodeType: "NOTION",
             nodeInitial: "No",
             nodeColor: "#E2EBF9",
             textColor: "#4285F4",
           },
-        ]);
-        break;
+        ];
     }
   };
-  console.log("addNodeOptions ",addNodeOptions);
+  console.log("addNodeOptions ", addNodeOptions);
 
-  const handleAddNewNodeToTOC = (nodeTitle) => {
+  const handleAddNewNodeToTOC = (AvailableNodeOptions,parent) => {
     /* Add to TOC Logic Here */
+    const nodeOptions = AvailableNodeOptions[0];
     let tempTOC = [...tableOfContents];
     setTableOfcontents([]);
     setTableOfContentsComponents([]);
+    console.log("nodeOptions in ", nodeOptions);
     tempTOC[selectedNode.index].isClicked = false;
     tempTOC[selectedNode.index].isChevronClicked = true;
     const newNode = {
-      nodeType: addNodeOptions[0].nodeType,
-      nodeTitle: nodeTitle,
+      nodeType: nodeOptions.nodeType,
+      nodeTitle: nodeOptions.nodeType,
       nodeLevel:
         selectedNode.nodeType !== "NOTION"
-          ? `${addNodeOptions[0].nodeInitial}${tempTOC.length}`
-          : `${addNodeOptions[0].nodeLevel}${tempTOC.length}`,
-      parent: `${addNodeOptions[0].nodeLevel}`,
+          ? `${nodeOptions.nodeInitial}${tempTOC.length}`
+          : `${nodeOptions.nodeLevel}${tempTOC.length}`,
+      parent: `${parent}`,
       htmlContent: "",
       isClicked: false,
       isChevronClicked: true,
       isEnterPressed: false,
     };
+    console.log("newNode ", newNode);
     const newTOC = insertElementAtPosition(
       tempTOC,
       newNode,
       selectedNode.index + 1
     );
+    console.log("newToc ", newTOC);
     const sortedTOC = sortTOC(newTOC);
     setTableOfcontents(sortedTOC);
     /* before the code bellow */
-    setSelectedNode(null);
+    /* props.setSelectedNode({
+      index: props.index,
+      nodeType: nodeElement.nodeType,
+      nodeTitle: nodeTitle,
+      parent: nodeObject.parent,
+      nodeLevel: nodeObject.nodeLevel,
+      htmlContent: nodeObject.htmlContent,
+      isClicked: isClicked,
+      isChevronClicked: isChevronClicked,
+      isEnterPressed: isEnterPressed,
+    }); */
     /*  setIsModalActive(false);
     setIsNodeTitleActive(false); */
     setAddNodeOptions([]);
-    setAddNodeInfo(null);
+    //setAddNodeInfo(null);
   };
-  
-  const handleAddButton = ()=>{
-    setAddNodeTypes(selectedNode)
-    handleAddNewNodeToTOC(addNodeOptions[0].nodeType);
-  }
+
+  const handleAddButton = () => {
+    console.log("Node, where to add: ",nodeObject)
+    const nodeOptions = setAddNodeTypes(nodeObject);
+    setAddNodeOptions(nodeOptions);
+    handleAddNewNodeToTOC(nodeOptions,nodeObject.nodeLevel);
+  };
 
   /////
   return (
@@ -305,17 +317,13 @@ function NodesCard(props) {
         >
           {console.log("This Node:", nodeObject)}
           <div className="flex justify-between gap-2 " style={{ width: "70%" }}>
-            {nodeObject.isChevronClicked ? (
-              <FaChevronDown
-                className="node-chevron"
-                onClick={handleChevronclick}
-              />
-            ) : (
-              <FaChevronRight
-                className="node-chevron"
-                onClick={handleChevronclick}
-              />
-            )}
+            <span className="node-chevron">
+              {nodeObject.isChevronClicked ? (
+                <FaChevronDown onClick={handleChevronclick} />
+              ) : (
+                <FaChevronRight onClick={handleChevronclick} />
+              )}
+            </span>
             <input
               className="focus:outline-none break-words hover:break-words"
               style={{
@@ -324,8 +332,8 @@ function NodesCard(props) {
               }}
               value={nodeTitle}
               onChange={(e) => setNodeTitle(e.target.value)}
-              onClick={handleNodeOnClick}
-              onBlur={() =>
+/*               onClick={handleNodeOnClick}
+ */              onBlur={() =>
                 props.updateNode({
                   index: props.index,
                   nodeType: nodeElement.nodeType,
@@ -341,12 +349,9 @@ function NodesCard(props) {
           </div>
           <div className="node-options w-full">
             <button>
-              <FaEllipsisH />
+              <FaTrash style={{color:"#f22"}}/>
             </button>
-            <button
-              onClick={handleAddButton}
-              className="add-button"
-            >
+            <button onClick={handleAddButton} className="add-button">
               <AiOutlinePlus size={20} />
             </button>
           </div>

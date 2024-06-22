@@ -513,6 +513,7 @@ const EditorPage = ({ params }) => {
           setTableOfContentsComponents={setTableOfContentsComponents}
           tableOfContents={tableOfContents}
           sortTOC={sortTOC}
+          insertElementAtPosition={insertElementAtPosition}
         />
       );
     }
