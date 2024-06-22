@@ -258,8 +258,8 @@ function NodesCard(props) {
     setTableOfcontents([]);
     setTableOfContentsComponents([]);
     console.log("nodeOptions in ", nodeOptions);
-    tempTOC[selectedNode.index].isClicked = false;
-    tempTOC[selectedNode.index].isChevronClicked = true;
+   /*  tempTOC[selectedNode.index].isClicked = false;
+    tempTOC[selectedNode.index].isChevronClicked = true; */
     let title = "";
     switch (nodeOptions.nodeType) {
       case "PART":
@@ -340,7 +340,7 @@ function NodesCard(props) {
       {/*Ici, on affiche seulement ssi  c'est lélément racine "DOC" ou si 
       la propriété isChevronclicked de son parent vaut true */}
       {nodeObject.nodeType == "DOC" ||
-      props.allNodes.find((item, index) => item.nodeLevel == nodeObject.parent)
+      props.allNodes?.find((item, index) => item.nodeLevel == nodeObject.parent)
         .isChevronClicked == true ? (
         <div
           onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
