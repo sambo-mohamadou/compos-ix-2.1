@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import styles from '../NodesCard/NodesCard.module.css';
-import { FaChevronRight, FaChevronDown, FaTrash } from 'react-icons/fa';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { width } from '@fortawesome/free-solid-svg-icons/fa0';
+import React, { useState, useEffect } from "react";
+import styles from "../NodesCard/NodesCard.module.css";
+import { FaChevronRight, FaChevronDown, FaTrash } from "react-icons/fa";
+import { AiOutlinePlus } from "react-icons/ai";
+import { width } from "@fortawesome/free-solid-svg-icons/fa0";
 function NodesCard(props) {
   console.log(props.nodeObject);
 
@@ -18,29 +18,29 @@ function NodesCard(props) {
   } = props;
   const NODEINFOS = [
     {
-      nodeType: 'DOC',
-      nodeColor: '#4285F4',
-      textColor: 'white',
+      nodeType: "DOC",
+      nodeColor: "#4285F4",
+      textColor: "white",
     },
     {
-      nodeType: 'PART',
-      nodeColor: '#34A853',
-      textColor: 'white',
+      nodeType: "PART",
+      nodeColor: "#34A853",
+      textColor: "white",
     },
     {
-      nodeType: 'CHAPTER',
-      nodeColor: '#FBBC05',
-      textColor: 'white',
+      nodeType: "CHAPTER",
+      nodeColor: "#FBBC05",
+      textColor: "white",
     },
     {
-      nodeType: 'PARAGRAPH',
-      nodeColor: '#EA4335',
-      textColor: 'white',
+      nodeType: "PARAGRAPH",
+      nodeColor: "#EA4335",
+      textColor: "white",
     },
     {
-      nodeType: 'NOTION',
-      nodeColor: 'black',
-      textColor: 'white',
+      nodeType: "NOTION",
+      nodeColor: "black",
+      textColor: "white",
       // textColor: '#4285F4',
     },
   ];
@@ -50,9 +50,9 @@ function NodesCard(props) {
     nodeObject.nodeType
       ? NODEINFOS.find((node) => node.nodeType === nodeObject.nodeType)
       : {
-          nodeType: 'DOC',
-          nodeColor: '#4285F4',
-          textColor: 'white',
+          nodeType: "DOC",
+          nodeColor: "#4285F4",
+          textColor: "white",
         }
   );
   console.log(nodeElement);
@@ -62,14 +62,14 @@ function NodesCard(props) {
   const [isChevronClicked, setIsChevronClicked] = useState(true);
   const [isEnterPressed, setIsEnterPressed] = useState(false);
 
-  const [nodeBgColor, setNodeBgColor] = useState('white');
+  const [nodeBgColor, setNodeBgColor] = useState("white");
   const [nodeColor, setNodeColor] = useState(nodeElement.nodeColor);
   const [textColor, setTextColor] = useState(nodeElement.textColor);
-  const [titleColor, setTitleColor] = useState('black');
+  const [titleColor, setTitleColor] = useState("black");
   const [addNodeOptions, setAddNodeOptions] = useState([]);
 
   const handleChevronclick = () => {
-    console.log('Ici,ici,ici');
+    console.log("Ici,ici,ici");
     /* Ici, on met la propriété isChevronClicked de l'élément cliqué à 
     false et on fait de même avec ses éléments enfants 
     (qui on la propriété parent égal à la propriété nodeLevel 
@@ -78,14 +78,14 @@ function NodesCard(props) {
     const children = props.allNodes.filter(
       (element, id) => nodeObject.nodeLevel == element.parent
     );
-    console.log('children: ', children);
+    console.log("children: ", children);
     /*Car le changement à false n'a pas encore éffectuer 
     or la présence dans cette fonction signifie qu'on a cliqué 
     sur le chevron et donc si la valeur du chevron (qui est encore qu'avant le clic)est true, 
     cela signifie qu'on veut qu'elle passe à false 
       */
     if (nodeObject.isChevronClicked == true) {
-      console.log('changing kids: ');
+      console.log("changing kids: ");
       for (const child of children) {
         child.isChevronClicked = false;
       }
@@ -108,22 +108,22 @@ function NodesCard(props) {
 
   const handleNodeOnClick = () => {
     setIsClicked(!isClicked);
-    console.log('Après clic: ', isClicked);
+    console.log("Après clic: ", isClicked);
     if (isClicked) {
       // When I click once on the node card, I enable the selected node card
       setNodeBgColor(nodeColor);
-      setNodeColor('white');
+      setNodeColor("white");
       setTextColor(
-        nodeElement.nodeType !== 'NOTION'
+        nodeElement.nodeType !== "NOTION"
           ? nodeElement.nodeColor
           : nodeElement.textColor
       );
-      setTitleColor(nodeElement.nodeType !== 'NOTION' ? 'white' : 'black');
+      setTitleColor(nodeElement.nodeType !== "NOTION" ? "white" : "black");
     } else {
-      setNodeBgColor('white');
+      setNodeBgColor("white");
       setNodeColor(nodeElement.nodeColor);
       setTextColor(nodeElement.textColor);
-      setTitleColor('black');
+      setTitleColor("black");
     }
     props.setSelectedNode({
       index: props.index,
@@ -141,8 +141,8 @@ function NodesCard(props) {
   const handleNotionOnEnterPress = (keyPressed) => {
     setIsEnterPressed(!isEnterPressed);
     if (
-      nodeElement.nodeType === 'NOTION' &&
-      keyPressed === 'Enter' &&
+      nodeElement.nodeType === "NOTION" &&
+      keyPressed === "Enter" &&
       !isClicked
     ) {
       if (isEnterPressed) {
@@ -164,27 +164,27 @@ function NodesCard(props) {
   //Gestion de l'indentation de la table de contenu (sidebar)
   //On applique divers style en fonction du noeud parent
   const setMargin = (nodeObject) => {
-    let css = '';
+    let css = "";
     /*Faut-il Empêcher que les ntions puisse créer d'autres notions 
     (empêcher que le clique sur notion propose de créer une autre notion */
     switch (nodeObject.parent?.substring(0, nodeObject.parent.length - 1)) {
-      case 'No':
-        css = 'notion';
+      case "No":
+        css = "notion";
         break;
-      case 'Pt':
-        css = 'chapter';
+      case "Pt":
+        css = "chapter";
         break;
-      case 'Pr':
-        css = 'notion';
+      case "Pr":
+        css = "notion";
         break;
-      case 'Ch':
-        css = 'paragraph';
+      case "Ch":
+        css = "paragraph";
         break;
-      case 'Co':
-        css = 'part';
+      case "Co":
+        css = "part";
         break;
       default:
-        css = 'independantNotion';
+        css = "independantNotion";
     }
     return styles[css];
   };
@@ -198,38 +198,38 @@ function NodesCard(props) {
   /////Add node functions
   const setAddNodeTypes = (selectedNode) => {
     switch (selectedNode.nodeType) {
-      case 'DOC':
+      case "DOC":
         return [
           {
-            nodeType: 'PART',
-            nodeInitial: 'Pt',
+            nodeType: "PART",
+            nodeInitial: "Pt",
             // nodeColor: '#34A853',
-            textColor: '#34A853',
+            textColor: "#34A853",
           },
         ];
-      case 'PART':
+      case "PART":
         return [
           {
-            nodeType: 'CHAPTER',
-            nodeInitial: 'Ch',
-            textColor: '#FBBC05',
+            nodeType: "CHAPTER",
+            nodeInitial: "Ch",
+            textColor: "#FBBC05",
             // textColor: 'white',
           },
         ];
-      case 'CHAPTER':
+      case "CHAPTER":
         return [
           {
-            nodeType: 'NOTION',
-            nodeInitial: 'No',
+            nodeType: "NOTION",
+            nodeInitial: "No",
             // nodeColor: '#E2EBF9',
-            nodeColor: '#4285F4',
+            nodeColor: "#4285F4",
             /* nodeType: 'PARAGRAPH',
             nodeInitial: 'Pr',
             textColor: '#EA4335', */
             // textColor: 'white',
           },
         ];
-     /*  case 'PARAGRAPH':
+      /*  case 'PARAGRAPH':
         return [
           {
             nodeType: 'NOTION',
@@ -249,7 +249,7 @@ function NodesCard(props) {
         ]; */
     }
   };
-  console.log('addNodeOptions ', addNodeOptions);
+  console.log("addNodeOptions ", addNodeOptions);
 
   const handleAddNewNodeToTOC = (AvailableNodeOptions, parent) => {
     /* Add to TOC Logic Here */
@@ -257,41 +257,41 @@ function NodesCard(props) {
     let tempTOC = [...tableOfContents];
     setTableOfcontents([]);
     setTableOfContentsComponents([]);
-    console.log('nodeOptions in ', nodeOptions);
+    console.log("nodeOptions in ", nodeOptions);
     tempTOC[selectedNode.index].isClicked = false;
     tempTOC[selectedNode.index].isChevronClicked = true;
-    let title="";
-    switch(nodeOptions.nodeType){
+    let title = "";
+    switch (nodeOptions.nodeType) {
       case "PART":
-        title="Partie";
+        title = "Partie";
         break;
       case "CHAPTER":
-        title="Chapitre"
+        title = "Chapitre";
         break;
       case "NOTION":
-        title="Notion"
+        title = "Notion";
         break;
     }
     const newNode = {
       nodeType: nodeOptions.nodeType,
       nodeTitle: title,
       nodeLevel:
-        selectedNode.nodeType !== 'NOTION'
+        selectedNode.nodeType !== "NOTION"
           ? `${nodeOptions.nodeInitial}${tempTOC.length}`
           : `${nodeOptions.nodeLevel}${tempTOC.length}`,
       parent: `${parent}`,
-      htmlContent: '',
+      htmlContent: "",
       isClicked: false,
       isChevronClicked: true,
       isEnterPressed: false,
     };
-    console.log('newNode ', newNode);
+    console.log("newNode ", newNode);
     const newTOC = insertElementAtPosition(
       tempTOC,
       newNode,
       selectedNode.index + 1
     );
-    console.log('newToc ', newTOC);
+    console.log("newToc ", newTOC);
     const sortedTOC = sortTOC(newTOC);
     setTableOfcontents(sortedTOC);
     /* before the code bellow */
@@ -313,59 +313,59 @@ function NodesCard(props) {
   };
 
   const handleAddButton = () => {
-    console.log('Node, where to add: ', nodeObject);
+    console.log("Node, where to add: ", nodeObject);
     const nodeOptions = setAddNodeTypes(nodeObject);
     setAddNodeOptions(nodeOptions);
     handleAddNewNodeToTOC(nodeOptions, nodeObject.nodeLevel);
   };
 
   /////Suppression de notion
-  const handleDeleteNotion = ()=>{
-    const table = [...tableOfContents]
-    console.log('Node, where to Delete: ', nodeObject);
-    table.filter((item)=>{
-      return item.nodeLevel !== nodeObject.nodeLevel && item.nodeType !== nodeObject.nodeType && item.nodeTitle !== nodeObject.nodeTitle;
-    })
-    console.log("new table: ",table);
-   setTableOfcontents(table);
+  const handleDeleteNotion = () => {
+    const table = [...tableOfContents];
+    console.log("Node, where to Delete: ", nodeObject);
+    console.log(tableOfContents);
+    const newTable = table.filter((item) => {
+      console.log(item);
+      return item.nodeLevel !== nodeObject.nodeLevel;
+    });
+    console.log("new table: ", newTable);
+    setTableOfcontents(newTable);
   };
   /////
 
   ////////////////
   return (
     <>
-      {console.log('allNodes: ', props.allNodes)}
+      {console.log("allNodes: ", props.allNodes)}
       {/*Ici, on affiche seulement ssi  c'est lélément racine "DOC" ou si 
       la propriété isChevronclicked de son parent vaut true */}
-      {nodeObject.nodeType == 'DOC' ||
+      {nodeObject.nodeType == "DOC" ||
       props.allNodes.find((item, index) => item.nodeLevel == nodeObject.parent)
         .isChevronClicked == true ? (
         <div
           onKeyDown={(e) => handleNotionOnEnterPress(e.key)}
           className={`node-item ${setMargin(nodeObject)}`}
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            padding: '4px 0px',
-            paddingRight: '4px',
-            paddingLeft: '4px',
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "4px 0px",
+            paddingRight: "4px",
+            paddingLeft: "4px",
             width: `${width}`,
           }}
         >
-          {console.log('This Node:', nodeObject)}
-          <div
-            className="flex justify-between w-full gap-2"
-          >
+          {console.log("This Node:", nodeObject)}
+          <div className="flex justify-between w-full gap-2">
             <div className="flex justify-center ">
               <span className="node-chevron">
                 {nodeObject.isChevronClicked ? (
                   <FaChevronDown
-                    style={{ width: '14px', height: '14px' }}
+                    style={{ width: "14px", height: "14px" }}
                     onClick={handleChevronclick}
                   />
                 ) : (
                   <FaChevronRight
-                    style={{ width: '14px', height: '14px' }}
+                    style={{ width: "14px", height: "14px" }}
                     onClick={handleChevronclick}
                   />
                 )}
@@ -374,10 +374,10 @@ function NodesCard(props) {
                 onClick={() => handleNodeOnClick()}
                 on
                 style={{
-                  fontWeight: 'bold',
-                  padding: '2px 5px',
+                  fontWeight: "bold",
+                  padding: "2px 5px",
                   borderRadius: 100,
-                  textAlign: 'center',
+                  textAlign: "center",
                   backgroundColor: `${textColor}`,
                   color: `${nodeColor}`,
                 }}
@@ -408,9 +408,9 @@ function NodesCard(props) {
                 }
               />
             </div>
-            <div className="flex items-center gap-2" >
+            <div className="flex items-center gap-2">
               <button onClick={handleDeleteNotion}>
-                <FaTrash style={{ color: '#f22' }} />
+                <FaTrash style={{ color: "#f22" }} />
               </button>
               <button onClick={handleAddButton} className="add-button">
                 <AiOutlinePlus size={20} />
@@ -419,7 +419,7 @@ function NodesCard(props) {
           </div>
         </div>
       ) : (
-        ''
+        ""
       )}
     </>
   );
