@@ -32,7 +32,7 @@ const createEmptyNotion = () => {
 
 const EditorPage = ({ params }) => {
   //States for the width sizes
-  const [minWidth, maxWidth, defaultWidth] = [300, 500, 350];
+  const [minWidth, maxWidth, defaultWidth] = [350, 500, 350];
   const [minWidth2, maxWidth2, defaultWidth2] = [50, 500, 350];
   const [width, setWidth] = useState(defaultWidth);
   const [width2, setWidth2] = useState(defaultWidth2);
@@ -785,9 +785,9 @@ const EditorPage = ({ params }) => {
           />
         </section>
         {/* Main Section  */}
-        <section className="w-full bg-white overflow-hidden  relative border-2 rounded-lg mt-2">
-          <div className="w-full h-12 flex items-center justify-between">
-            <h1 className="font-bold text-3xl uppercase">
+        <section className="w-full px-8 bg-white overflow-y-auto relative border-2 rounded-lg mt-2">
+          <div className="w-full h-12 flex py-10 items-center justify-between">
+            <h1 className="font-bold text-2xl uppercase">
               EDITION DE CONTENUS
             </h1>
 
@@ -830,7 +830,7 @@ const EditorPage = ({ params }) => {
               </div>
             )}
           </div>
-          <div className="w-full relative h-[calc(100%-64px)] overflow-hidden border-[#E2EBF9] px-[2px] border-2 rounded-lg">
+          <div className="w-full relative h-[calc(100%-64px)] overflow-hidden  px-[2px] ">
             {isNotionEditorActive && (
               <div className="w-full px-4 flex justify-end items-center h-[50px] z-50 border relative">
                 <button
