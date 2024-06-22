@@ -32,7 +32,7 @@ const createEmptyNotion = () => {
 
 const EditorPage = ({ params }) => {
   //States for the width sizes
-  const [minWidth, maxWidth, defaultWidth] = [300, 500, 350];
+  const [minWidth, maxWidth, defaultWidth] = [350, 500, 350];
   const [minWidth2, maxWidth2, defaultWidth2] = [50, 500, 350];
   const [width, setWidth] = useState(defaultWidth);
   const [width2, setWidth2] = useState(defaultWidth2);
@@ -459,23 +459,23 @@ const EditorPage = ({ params }) => {
       switch (node.nodeType) {
         case "DOC":
           nodeHTML += `<div class="node" data-node-type="DOC">
-                <h1 class="node-doc">${node.nodeTitle}</h1>`;
+                <h2 class="node-doc">${node.nodeTitle}</h2>`;
           break;
         case "PART":
           nodeHTML += `<div class="node" data-node-type="PART">
-                <h2 class="node-part">${node.nodeTitle}</h2>`;
+                <h4 class="node-part">${node.nodeTitle}</h4>`;
           break;
         case "CHAPTER":
           nodeHTML += `<div class="node" data-node-type="CHAPTER">
-                <h3 class="node-chapter">${node.nodeTitle}</h3>`;
+                <h4 class="node-chapter">${node.nodeTitle}</h4>`;
           break;
         case "PARAGRAPH":
           nodeHTML += `<div class="node" data-node-type="PARAGRAPH">
                 <h4 class="node-paragraph">${node.nodeTitle}</h4>`;
           break;
         case "NOTION":
-          nodeHTML += `<div class="node" data-node-type="NOTION">
-                <h5 class="node-notion">${node.nodeTitle}</h5>
+          nodeHTML += `<div class="node" classname="flex gap-1" data-node-type="NOTION">
+                <h4 class="node-notion">${node.nodeTitle}</h4>
                 <p class="notion-body">${node.htmlContent}</p>`;
           break;
         default:
@@ -785,9 +785,9 @@ const EditorPage = ({ params }) => {
           />
         </section>
         {/* Main Section  */}
-        <section className="w-full bg-white overflow-hidden  relative border-2 rounded-lg mt-2">
-          <div className="w-full h-12 flex items-center justify-between">
-            <h1 className="font-bold text-3xl uppercase">
+        <section className="w-full px-8 bg-white overflow-y-auto relative border-2 rounded-lg mt-2">
+          <div className="w-full h-12 flex py-10 items-center justify-between">
+            <h1 className="font-bold text-2xl uppercase">
               EDITION DE CONTENUS
             </h1>
 
@@ -830,7 +830,7 @@ const EditorPage = ({ params }) => {
               </div>
             )}
           </div>
-          <div className="w-full relative h-[calc(100%-64px)] overflow-hidden border-[#E2EBF9] px-[2px] border-2 rounded-lg">
+          <div className="w-full relative h-[calc(100%-64px)] overflow-hidden  px-[2px] ">
             {isNotionEditorActive && (
               <div className="w-full px-4 flex justify-end items-center h-[50px] z-50 border relative">
                 <button

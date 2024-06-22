@@ -18,9 +18,9 @@ function NodesCard(props) {
   } = props;
   const NODEINFOS = [
     {
-      nodeType: "DOC",
-      nodeColor: "#4285F4",
-      textColor: "white",
+      nodeType: 'DOC',
+      nodeColor: 'black',
+      textColor: 'white',
     },
     {
       nodeType: "PART",
@@ -38,9 +38,9 @@ function NodesCard(props) {
       textColor: "white",
     },
     {
-      nodeType: "NOTION",
-      nodeColor: "black",
-      textColor: "white",
+      nodeType: 'NOTION',
+      nodeColor: '#4285F4',
+      textColor: 'white', 
       // textColor: '#4285F4',
     },
   ];
