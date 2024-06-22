@@ -459,23 +459,23 @@ const EditorPage = ({ params }) => {
       switch (node.nodeType) {
         case "DOC":
           nodeHTML += `<div class="node" data-node-type="DOC">
-                <h1 class="node-doc">${node.nodeTitle}</h1>`;
+                <h2 class="node-doc">${node.nodeTitle}</h2>`;
           break;
         case "PART":
           nodeHTML += `<div class="node" data-node-type="PART">
-                <h2 class="node-part">${node.nodeTitle}</h2>`;
+                <h4 class="node-part">${node.nodeTitle}</h4>`;
           break;
         case "CHAPTER":
           nodeHTML += `<div class="node" data-node-type="CHAPTER">
-                <h3 class="node-chapter">${node.nodeTitle}</h3>`;
+                <h4 class="node-chapter">${node.nodeTitle}</h4>`;
           break;
         case "PARAGRAPH":
           nodeHTML += `<div class="node" data-node-type="PARAGRAPH">
                 <h4 class="node-paragraph">${node.nodeTitle}</h4>`;
           break;
         case "NOTION":
-          nodeHTML += `<div class="node" data-node-type="NOTION">
-                <h5 class="node-notion">${node.nodeTitle}</h5>
+          nodeHTML += `<div class="node" classname="flex gap-1" data-node-type="NOTION">
+                <h4 class="node-notion">${node.nodeTitle}</h4>
                 <p class="notion-body">${node.htmlContent}</p>`;
           break;
         default:
