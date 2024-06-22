@@ -126,9 +126,10 @@ label {
   align-items: flex-start;
   /*justify-content: space-between;*/
   background-color: #fff;
-  border-radius: 2rem;
+  border-radius: 8px;
+  border-width: 2px;
   overflow: auto;
-  padding: 0 0.4rem;
+  padding: 0 .6rem;
   align-items: center;
   align-content: center;
   vertical-align: center;
