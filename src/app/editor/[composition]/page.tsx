@@ -506,8 +506,13 @@ const EditorPage = ({ params }) => {
           nodeObject={newTable[index]}
           updateNode={updateEditedNodeTitle}
           setSelectedNode={setSelectedNodeInTOC}
+          selectedNode={selectedNode}
           setEnterPressedNotion={setEnterPressNotionInTOC}
           allNodes = {newTable}
+          setTableOfcontents={setTableOfcontents}
+          setTableOfContentsComponents={setTableOfContentsComponents}
+          tableOfContents={tableOfContents}
+          sortTOC={sortTOC}
         />
       );
     }

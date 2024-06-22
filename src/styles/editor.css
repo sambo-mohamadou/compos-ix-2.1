@@ -147,3 +147,24 @@ label {
   margin: 0.4rem 0 0 0;
   font-size: 0.7rem;
 }
+
+.add-button{
+  background-color: transparent;
+  color: rgb(88, 88, 88);
+}
+
+.node-options{
+  display:flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  gap: 2rem;
+  color: rgb(88, 88, 88);
+  vertical-align: middle;
+}
+
+.node-options > *:hover{
+  border:2px solid #515151;
+  padding:0 2px;
+  border-radius: 20%;
+  background-color: #dbdbdb;
+}
