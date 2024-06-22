@@ -47,7 +47,7 @@ const ManagerSideBar: React.FC<{ compositionList: string[] | [] }> = ({ composit
               onMouseLeave={onMouseLeave}
             > 
               <Link
-                href={`/editor/{encodeURIComponent(composition)}`}
+                href={`/editor/${encodeURIComponent(composition)}`}
                 style={{
                   display: opened ? "block" : "none",
                   backgroundColor:

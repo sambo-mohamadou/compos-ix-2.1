@@ -260,9 +260,21 @@ function NodesCard(props) {
     console.log('nodeOptions in ', nodeOptions);
     tempTOC[selectedNode.index].isClicked = false;
     tempTOC[selectedNode.index].isChevronClicked = true;
+    let title="";
+    switch(nodeOptions.nodeType){
+      case "PART":
+        title="Partie";
+        break;
+      case "CHAPTER":
+        title="Chapitre"
+        break;
+      case "NOTION":
+        title="Notion"
+        break;
+    }
     const newNode = {
       nodeType: nodeOptions.nodeType,
-      nodeTitle: nodeOptions.nodeType,
+      nodeTitle: title,
       nodeLevel:
         selectedNode.nodeType !== 'NOTION'
           ? `${nodeOptions.nodeInitial}${tempTOC.length}`
@@ -307,7 +319,19 @@ function NodesCard(props) {
     handleAddNewNodeToTOC(nodeOptions, nodeObject.nodeLevel);
   };
 
+  /////Suppression de notion
+  const handleDeleteNotion = ()=>{
+    const table = [...tableOfContents]
+    console.log('Node, where to Delete: ', nodeObject);
+    table.filter((item)=>{
+      return item.nodeLevel !== nodeObject.nodeLevel && item.nodeType !== nodeObject.nodeType && item.nodeTitle !== nodeObject.nodeTitle;
+    })
+    console.log("new table: ",table);
+   setTableOfcontents(table);
+  };
   /////
+
+  ////////////////
   return (
     <>
       {console.log('allNodes: ', props.allNodes)}
@@ -385,7 +409,7 @@ function NodesCard(props) {
               />
             </div>
             <div className="flex items-center gap-2" >
-              <button>
+              <button onClick={handleDeleteNotion}>
                 <FaTrash style={{ color: '#f22' }} />
               </button>
               <button onClick={handleAddButton} className="add-button">
