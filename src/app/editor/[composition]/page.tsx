@@ -785,8 +785,8 @@ const EditorPage = ({ params }) => {
           />
         </section>
         {/* Main Section  */}
-        <section className="w-full px-8 bg-white overflow-y-auto relative border-2 rounded-lg mt-2">
-          <div className="w-full h-12 flex py-10 items-center justify-between">
+        <section className="w-full h-100 px-8 bg-white overflow-y-auto relative border-2 rounded-lg mt-2">
+          <div className="w-full h-12 flex py-10 items-center overflow-y-auto justify-between">
             <h1 className="font-bold text-2xl uppercase">
               EDITION DE CONTENUS
             </h1>
@@ -841,7 +841,7 @@ const EditorPage = ({ params }) => {
                 </button>
               </div>
             )}
-            <div className="w-full h-full overflow-scroll">
+            <div className="w-full h-full overflow-y-auto">
               {/* <div>{JSON.stringify({tableOfContents})}</div>
                         <br />
                         <br />
@@ -854,7 +854,7 @@ const EditorPage = ({ params }) => {
                   editorContent={tableOfContents[enterPressedNotion.index]}
                 />
               ) : (
-                <div className="w-full h-full overflow-hidden bg-white p-4">
+                <div className="w-full h-full overflow-y-auto bg-white p-4">
                   <div className="html-viewer">
                     <div
                       dangerouslySetInnerHTML={{ __html: renderingHtml }}

@@ -6,11 +6,12 @@
     right: 16px;
     border-radius: 8px;
     /* gap: 5px; */
-    background-color: transparent;
+    background-color: white;
     border: 1px solid #ccc;
     transition-delay: 0s;
     min-height: min(60vh, 365px);
     width: 420px;
+    z-index: 9999;
     max-height: max(-76px + 100vh, 365px);
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     
