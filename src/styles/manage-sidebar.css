@@ -1,0 +1,19 @@
+.custom-context-menu {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px #0000001a;
+    padding: 8px 0;
+    z-index: 1;
+  }
+  
+  .custom-context-menu div {
+    padding: 6px 16px;
+    cursor: pointer;
+  }
+  
+  .custom-context-menu div:hover {
+    background-color: #f1f1f1;
+  }
+  .composition:hover{
+    background-color: #D3D3D3;
+  }

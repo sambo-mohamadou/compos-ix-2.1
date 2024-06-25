@@ -11,30 +11,45 @@ const page = () => {
   const [createProject, setCreateProject] = useState(false);
   const [compositionName, setCompositionName] = useState("");
   const [compositionList, setCompositionList] = useState<string[]>([]);
+  const [showContextMenu, setShowContextMenu] = useState(false); //pour le menu contextuel (voir managerSideBar)
 
-  const {user, userInfo} = useAuth();
+  const { user, userInfo } = useAuth();
 
+  //Pour fermer le menu contextuel
+  const handleClick = (event) => {
+    console.log("close");
+    if (event.target.closest(".custom-context-menu")) {
+      // Le clic a eu lieu dans le menu, on ne fait rien
+      return;
+    }
+    // Le clic a eu lieu en dehors du menu, on le ferme
+    setShowContextMenu(false);
+  };
 
   const handleAddComposition = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!compositionName) return;
 
-      // const userInfoArray = Object.values(userInfo);
-          
+    // const userInfoArray = Object.values(userInfo);
 
     setCompositionList([...compositionList, compositionName]);
     setCompositionName("");
     setCreateProject(false);
   };
 
-  
-
   return (
-    <div className="w-full h-screen overflow-hidden flex flex-col justify-between items-start">
+    <div className="w-full h-screen overflow-hidden flex flex-col justify-between items-start"
+    onClick={handleClick}>
       <Header />
       <div className="w-full h-full m-auto mt-0 overflow-hidden">
         <div className="w-full h-full flex justify-start items-start pt-4 pl-1 overflow-hidden relative">
-          <ManagerSideBar compositionList={compositionList} />
+          <ManagerSideBar
+            compositionList={compositionList}
+            showContextMenu={showContextMenu}
+            setShowContextMenu={setShowContextMenu}
+            setCompositionList={setCompositionList}
+            
+          />
           <section className="h-full w-full flex flex-col justify-between pl-4 overflow-hidden relative">
             <Search />
             <div className="w-full h-full p-2 overflow-hidden">

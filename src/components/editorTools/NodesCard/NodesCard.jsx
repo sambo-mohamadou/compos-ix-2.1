@@ -18,9 +18,9 @@ function NodesCard(props) {
   } = props;
   const NODEINFOS = [
     {
-      nodeType: 'DOC',
-      nodeColor: 'black',
-      textColor: 'white',
+      nodeType: "DOC",
+      nodeColor: "black",
+      textColor: "white",
     },
     {
       nodeType: "PART",
@@ -38,9 +38,9 @@ function NodesCard(props) {
       textColor: "white",
     },
     {
-      nodeType: 'NOTION',
-      nodeColor: '#4285F4',
-      textColor: 'white', 
+      nodeType: "NOTION",
+      nodeColor: "#4285F4",
+      textColor: "white",
       // textColor: '#4285F4',
     },
   ];
@@ -215,17 +215,23 @@ function NodesCard(props) {
             textColor: "#FBBC05",
             // textColor: 'white',
           },
+          {
+            nodeType: "NOTION",
+            nodeInitial: "No",
+            nodeColor: "#4285F4",
+          },
         ];
       case "CHAPTER":
         return [
           {
             nodeType: "NOTION",
             nodeInitial: "No",
-            // nodeColor: '#E2EBF9',
             nodeColor: "#4285F4",
-            /* nodeType: 'PARAGRAPH',
-            nodeInitial: 'Pr',
-            textColor: '#EA4335', */
+          },
+          {
+            nodeType: "PARAGRAPH",
+            nodeInitial: "Pr",
+            textColor: "#EA4335",
             // textColor: 'white',
           },
         ];
@@ -254,22 +260,22 @@ function NodesCard(props) {
   const handleAddNewNodeToTOC = (AvailableNodeOptions, parent) => {
     /* Add to TOC Logic Here */
     const nodeOptions = AvailableNodeOptions[0];
-    console.log("node options recu:",nodeOptions)
+    console.log("node options recu:", nodeOptions);
     let tempTOC = [...tableOfContents];
     setTableOfcontents([]);
     setTableOfContentsComponents([]);
-   /*  tempTOC[selectedNode.index].isClicked = false;
+    /*  tempTOC[selectedNode.index].isClicked = false;
     tempTOC[selectedNode.index].isChevronClicked = true; */
     let title = "";
-    let level = ""
+    let level = "";
     switch (nodeOptions.nodeType) {
       case "PART":
         title = "Partie";
-        level= "Pt"
+        level = "Pt";
         break;
       case "CHAPTER":
         title = "Chapitre";
-        level="Ch"
+        level = "Ch";
         break;
       case "NOTION":
         title = "Notion";
