@@ -539,7 +539,6 @@ function NodesCard(props) {
                     </span>
                     <div className="flex flex-col justify-center items-center gap-1 w-full">
                       <div className="group">
-                        <label htmlFor="node-title">New Node Title</label>
                         <input
                           name="title"
                           id="node-title"
@@ -547,6 +546,7 @@ function NodesCard(props) {
                           type="text"
                           className="input"
                           autoFocus
+                          placeholder="Node Title"
                         />
 
                         <span className="highlight"></span>
