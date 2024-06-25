@@ -191,12 +191,6 @@ function NodesCard(props) {
     }
     return styles[css];
   };
-  /* console.log(
-    "Plus de Clog ici ;isClicked ",
-    isClicked,
-    " isChevronClicked",
-    isChevronClicked
-  ); */
 
   /////Add node functions
   const getNodeOptions = (selectedNode) => {
@@ -269,41 +263,35 @@ function NodesCard(props) {
   };
   console.log("nodeOption ", nodeOption);
 
-  const handleAddNewNodeToTOC = (AvailableNodeOptions, parent) => {
+  const handleAddNewNodeToTOC = (nodeOption, title, parent) => {
     /* Add to TOC Logic Here */
-    const nodeOptions = AvailableNodeOptions[0];
-    console.log("node options recu:", nodeOptions);
+    console.log("node option recu:", nodeOption);
     let tempTOC = [...tableOfContents];
     setTableOfcontents([]);
     setTableOfContentsComponents([]);
     /*  tempTOC[selectedNode.index].isClicked = false;
     tempTOC[selectedNode.index].isChevronClicked = true; */
-    let title = "";
     let level = "";
-    switch (nodeOptions.nodeType) {
+    switch (nodeOption.nodeType) {
       case "PARTIE":
-        title = "Partie";
         level = "Pt";
         break;
       case "CHAPTER":
-        title = "Chapitre";
         level = "Ch";
         break;
       case "NOTION":
-        title = "Notion";
         level = "No";
         break;
       case "PARAGRAPH":
-        title = "Paragraph";
         level = "Pr";
         break;
     }
     const newNode = {
-      nodeType: nodeOptions.nodeType,
+      nodeType: nodeOption.nodeType,
       nodeTitle: title,
       nodeLevel:
         selectedNode.nodeType !== "NOTION"
-          ? `${nodeOptions.nodeInitial}${tempTOC.length}`
+          ? `${nodeOption.nodeInitial}${tempTOC.length}`
           : `${level}${tempTOC.length}`,
       parent: `${parent}`,
       htmlContent: "",
@@ -353,13 +341,12 @@ function NodesCard(props) {
     const formData = new FormData(event.currentTarget);
     const name = formData.get("title");
     console.log(name);
-    handleAddNewNodeToTOC(name);
+    handleAddNewNodeToTOC(nodeOption, name, nodeObject.nodeLevel);
   };
 
   const handleAddButton = () => {
+    setAddNodeModal(true);
     console.log("Node, where to add: ", nodeObject);
-    const nodeOptions = getNodeOptions(nodeObject);
-    handleAddNewNodeToTOC(nodeOptions, nodeObject.nodeLevel);
   };
 
   /////Suppression de notion
@@ -455,16 +442,20 @@ function NodesCard(props) {
               <button onClick={handleDeleteNotion}>
                 <FaTrash style={{ color: "#f22" }} />
               </button>
-              <button onClick={handleAddButton} className="add-button">
-                <AiOutlinePlus size={20} />
-              </button>
+              {nodeObject.nodeType === "NOTION" ? (
+                ""
+              ) : (
+                <button onClick={handleAddButton} className="add-button">
+                  <AiOutlinePlus size={20} />
+                </button>
+              )}
             </div>
           </div>
 
           {/* Modal du choix de la notion à ajouter */}
           {addNodeModal ? (
             <div className="modal-background inset-0 bg-black/20 backdrop-blur-sm dark:bg-slate-900/80">
-              {isNodeTitleModalActive ? (
+              {!isNodeTitleModalActive ? (
                 <div className="modal-container">
                   {/* New Node Select Modal */}
                   <div className="flex justify-between px-2">
@@ -511,7 +502,7 @@ function NodesCard(props) {
                                 color: `${nodeOption.textColor}`,
                               }}
                             >
-                              {nodeObject.nodeLevel.substring(0, 2)}
+                              {nodeOption.nodeInitial}
                             </span>
                             <span
                               style={{ color: "black", fontWeight: "bold" }}
@@ -583,7 +574,7 @@ function NodesCard(props) {
                         </span>
                       </div>
                       <button
-                      type="submit"
+                        type="submit"
                         className="capitalize h-12 w-32 text-xl"
                         style={{
                           backgroundColor: "#4285F4",
