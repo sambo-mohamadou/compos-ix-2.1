@@ -23,7 +23,7 @@ function NodesCard(props) {
       textColor: "white",
     },
     {
-      nodeType: "PART",
+      nodeType: "PARTIE",
       nodeColor: "#34A853",
       textColor: "white",
     },
@@ -66,7 +66,10 @@ function NodesCard(props) {
   const [nodeColor, setNodeColor] = useState(nodeElement.nodeColor);
   const [textColor, setTextColor] = useState(nodeElement.textColor);
   const [titleColor, setTitleColor] = useState("black");
-  const [addNodeOptions, setAddNodeOptions] = useState([]);
+  const [nodeOption, setNodeOption] = useState(null);
+  const [addNodeModal, setAddNodeModal] = useState(false);
+  const [isNodeTitleModalActive, setIsAddNodeTitleModalActive] =
+    useState(false);
 
   const handleChevronclick = () => {
     console.log("Ici,ici,ici");
@@ -196,29 +199,36 @@ function NodesCard(props) {
   ); */
 
   /////Add node functions
-  const setAddNodeTypes = (selectedNode) => {
+  const getNodeOptions = (selectedNode) => {
     switch (selectedNode.nodeType) {
       case "DOC":
         return [
           {
-            nodeType: "PART",
+            nodeType: "PARTIE",
             nodeInitial: "Pt",
-            // nodeColor: '#34A853',
+            nodeColor: "white",
             textColor: "#34A853",
           },
+          {
+            nodeType: "NOTION",
+            nodeInitial: "No",
+            textColor: "#4285F4",
+            nodeColor: "white",
+          },
         ];
-      case "PART":
+      case "PARTIE":
         return [
           {
             nodeType: "CHAPTER",
             nodeInitial: "Ch",
             textColor: "#FBBC05",
-            // textColor: 'white',
+            nodeColor: "white",
           },
           {
             nodeType: "NOTION",
             nodeInitial: "No",
-            nodeColor: "#4285F4",
+            textColor: "#4285F4",
+            nodeColor: "white",
           },
         ];
       case "CHAPTER":
@@ -226,24 +236,26 @@ function NodesCard(props) {
           {
             nodeType: "NOTION",
             nodeInitial: "No",
-            nodeColor: "#4285F4",
+            textColor: "#4285F4",
+            nodeColor: "white",
           },
           {
             nodeType: "PARAGRAPH",
             nodeInitial: "Pr",
             textColor: "#EA4335",
-            // textColor: 'white',
+            nodeColor: "white",
           },
         ];
-      /*  case 'PARAGRAPH':
+      case "PARAGRAPH":
         return [
           {
-            nodeType: 'NOTION',
-            nodeInitial: 'No',
-            // nodeColor: '#E2EBF9',
-            textColor: '#4285F4',
+            nodeType: "NOTION",
+            nodeInitial: "No",
+            textColor: "#4285F4",
+            nodeColor: "white",
           },
         ];
+      /*
       default:
         return [
           {
@@ -255,7 +267,7 @@ function NodesCard(props) {
         ]; */
     }
   };
-  console.log("addNodeOptions ", addNodeOptions);
+  console.log("nodeOption ", nodeOption);
 
   const handleAddNewNodeToTOC = (AvailableNodeOptions, parent) => {
     /* Add to TOC Logic Here */
@@ -269,7 +281,7 @@ function NodesCard(props) {
     let title = "";
     let level = "";
     switch (nodeOptions.nodeType) {
-      case "PART":
+      case "PARTIE":
         title = "Partie";
         level = "Pt";
         break;
@@ -280,6 +292,10 @@ function NodesCard(props) {
       case "NOTION":
         title = "Notion";
         level = "No";
+        break;
+      case "PARAGRAPH":
+        title = "Paragraph";
+        level = "Pr";
         break;
     }
     const newNode = {
@@ -318,14 +334,31 @@ function NodesCard(props) {
     }); */
     /*  setIsModalActive(false);
     setIsNodeTitleActive(false); */
-    setAddNodeOptions([]);
     //setAddNodeInfo(null);
+  };
+
+  const handleExitModal = () => {
+    setAddNodeModal(false);
+    setIsAddNodeTitleModalActive(false);
+    getNodeOptions(null);
+  };
+
+  const handleOpenAddTitleModal = (nodeOption) => {
+    setIsAddNodeTitleModalActive(true);
+    setNodeOption(nodeOption);
+  };
+
+  const handleTitleFormSubmit = (event) => {
+    event.preventDefault;
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("title");
+    console.log(name);
+    handleAddNewNodeToTOC(name);
   };
 
   const handleAddButton = () => {
     console.log("Node, where to add: ", nodeObject);
-    const nodeOptions = setAddNodeTypes(nodeObject);
-    setAddNodeOptions(nodeOptions);
+    const nodeOptions = getNodeOptions(nodeObject);
     handleAddNewNodeToTOC(nodeOptions, nodeObject.nodeLevel);
   };
 
@@ -427,6 +460,145 @@ function NodesCard(props) {
               </button>
             </div>
           </div>
+
+          {/* Modal du choix de la notion à ajouter */}
+          {addNodeModal ? (
+            <div className="modal-background inset-0 bg-black/20 backdrop-blur-sm dark:bg-slate-900/80">
+              {isNodeTitleModalActive ? (
+                <div className="modal-container">
+                  {/* New Node Select Modal */}
+                  <div className="flex justify-between px-2">
+                    <span className="w-full text-center text-[24px] font-bold">
+                      Add a Node to the Selected Node : {nodeObject.nodeTitle}
+                    </span>
+                    <button
+                      onClick={() => handleExitModal()}
+                      className="text-[24px] font-bold"
+                      type="button"
+                    >
+                      X
+                    </button>
+                  </div>
+                  <div className="border-2 border-[#4285F4] rounded-lg h-full flex flex-col justify-evenly items-center">
+                    <span className="capitalize text-[20px] font-bold">
+                      Select the node you want to add
+                    </span>
+                    <div className="flex flex-row justify-evenly w-full">
+                      {getNodeOptions(nodeObject).map((nodeOption, index) => {
+                        console.log(nodeOption);
+                        return (
+                          <button
+                            onClick={() => handleOpenAddTitleModal(nodeOption)}
+                            key={index}
+                            className="p-[8px] flex flex-col gap-[5px] items-center"
+                            style={{
+                              backgroundColor: "white",
+                              borderRadius: 8,
+                              boxShadow:
+                                "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
+                            }}
+                          >
+                            <span
+                              className="text-[50px]"
+                              style={{
+                                width: 100,
+                                height: 100,
+                                fontWeight: "bold",
+                                padding: "8px",
+                                borderRadius: 100,
+                                textAlign: "center",
+                                backgroundColor: `${nodeOption.nodeColor}`,
+                                color: `${nodeOption.textColor}`,
+                              }}
+                            >
+                              {nodeObject.nodeLevel.substring(0, 2)}
+                            </span>
+                            <span
+                              style={{ color: "black", fontWeight: "bold" }}
+                            >
+                              {nodeOption.nodeType}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="modal-container">
+                  {/* New Node Title Input Modal */}
+                  <div className="flex justify-between px-2">
+                    <span className="w-full text-center text-[24px] font-bold">
+                      Add a Node to the Selected Node : {nodeObject.nodeTitle}
+                    </span>
+                    <button
+                      onClick={() => handleExitModal()}
+                      className="text-[24px] font-bold"
+                      type="button"
+                    >
+                      X
+                    </button>
+                  </div>
+                  <form
+                    className="border-2 border-[#4285F4] rounded-lg h-full flex flex-col justify-evenly items-center"
+                    onSubmit={handleTitleFormSubmit}
+                  >
+                    <span className="capitalize text-[20px] font-bold">
+                      Add a Title to the Node
+                    </span>
+                    <div className="flex flex-col justify-center items-center gap-1 w-full">
+                      <div className="group">
+                        <label htmlFor="node-title">New Node Title</label>
+                        <input
+                          name="title"
+                          id="node-title"
+                          required
+                          type="text"
+                          className="input"
+                          autoFocus
+                        />
+
+                        <span className="highlight"></span>
+                        <span className="bar"></span>
+                      </div>
+                      <div
+                        className="p-[6px] flex flex-row gap-[5px] items-baseline rounded-lg"
+                        style={{
+                          backgroundColor: "white",
+                          boxShadow:
+                            "0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            padding: "2px 5px",
+                            borderRadius: 100,
+                            textAlign: "center",
+                            backgroundColor: `${nodeOption.nodeColor}`,
+                            color: `${nodeOption.textColor}`,
+                          }}
+                        >
+                          {nodeOption.nodeInitial}
+                        </span>
+                      </div>
+                      <button
+                      type="submit"
+                        className="capitalize h-12 w-32 text-xl"
+                        style={{
+                          backgroundColor: "#4285F4",
+                          borderRadius: 8,
+                          color: "white",
+                        }}
+                      >
+                        Add Node
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+            </div>
+          ) : null}
         </div>
       ) : (
         ""

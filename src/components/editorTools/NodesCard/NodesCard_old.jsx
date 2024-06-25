@@ -10,7 +10,7 @@ function NodesCard(props) {
       textColor: "white",
     },
     {
-      nodeType: "PART",
+      nodeType: "PARTIE",
       nodeInitial: "Pt",
       nodeColor: "#34A853",
       textColor: "white",

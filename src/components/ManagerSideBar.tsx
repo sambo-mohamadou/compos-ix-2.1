@@ -126,9 +126,9 @@ const ManagerSideBar: React.FC<{
                 }
               >
                 <h1 className="font-extrabold text-2xl text-center py-3 mt-2">
-                  Nouveau Nom
+                  Renommer
                 </h1>
-                <h4 className="px-2 font-bold mt-2">Nom de la composition</h4>
+                <h4 className="px-2 font-bold mt-2">Nouveau nom de la composition</h4>
                 <div className="p-2">
                   <input
                     type="text"

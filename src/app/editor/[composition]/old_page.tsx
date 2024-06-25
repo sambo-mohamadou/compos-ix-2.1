@@ -180,7 +180,7 @@ function CreationEditor({ params }) {
   };
 
   const updateNotionHTMLInTOC = (htmlString) => {
-    console.log(htmlString, enterPressedNotion)
+    console.log(htmlString, enterPressedNotion);
     let tempTOC = [...tableOfContents];
     setTableOfcontents([]);
     tempTOC[enterPressedNotion.index].htmlContent = htmlString;
@@ -510,7 +510,7 @@ function CreationEditor({ params }) {
     };
     getAllNode();
   }, [tableOfContents]);
-  console.log("Dans page, isClicked: ",selectedNode.isClicked)
+  console.log("Dans page, isClicked: ", selectedNode.isClicked);
   return (
     <div className="overflow-hidden w-full h-screen flex flex-col justify-between items-start">
       <Header />
@@ -757,7 +757,11 @@ function CreationEditor({ params }) {
                         <div>{JSON.stringify(enterPressedNotion)}</div> */}
 
               {isNotionEditorActive && (
-                <RichTextEditor props={handleRichTextChange} chandleEditorContent={setHtmlEditorContent} editorContent = {tableOfContents[enterPressedNotion.index]}/>
+                <RichTextEditor
+                  props={handleRichTextChange}
+                  chandleEditorContent={setHtmlEditorContent}
+                  editorContent={tableOfContents[enterPressedNotion.index]}
+                />
               )}
               <div className="w-full h-full overflow-hidden bg-white p-4">
                 <div className="html-viewer">
@@ -781,8 +785,7 @@ function CreationEditor({ params }) {
             richTextValue={richTextValue}
             documentTitle={params.composition}
           />
-        )
-        }
+        )}
       </div>
     </div>
   );

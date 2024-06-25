@@ -720,8 +720,9 @@ const EditorPage = ({ params }) => {
                       </span>
                       <div className="flex flex-col justify-center items-center gap-1 w-full">
                         <div className="group">
+                          <label>New Node Title</label>
                           <input
-                            required=""
+                            required
                             type="text"
                             className="input"
                             onKeyDown={(e) => {
@@ -735,7 +736,6 @@ const EditorPage = ({ params }) => {
 
                           <span className="highlight"></span>
                           <span className="bar"></span>
-                          <label>New Node Title</label>
                         </div>
                         <div
                           className="p-[6px] flex flex-row gap-[5px] items-baseline rounded-lg"
