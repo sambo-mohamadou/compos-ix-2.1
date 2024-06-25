@@ -1,4 +1,4 @@
-export {default as RichTextEditor} from './RichTextEditor/new_rich_text_editor'
+export {default as RichTextEditor} from './RichTextEditor/RichTextEditor'
 export {default as Header} from '../Header'
 export {default as NotionFinder} from './NotionFinder'
 export {default as NotionSearchCard} from './NotionSearchCard/NotionSearchCard'
