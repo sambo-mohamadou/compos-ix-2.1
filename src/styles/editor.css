@@ -1,0 +1,172 @@
+.modal-background {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 9999;
+  background-color: #00000080;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.notion-finder-width {
+  width: 600px !important;
+}
+.modal-container {
+  background-color: white;
+  border-radius: 32px;
+  width: 70%;
+  aspect-ratio: 3/1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 8px;
+  box-shadow: 0 10px 15px -3px #0000001a, 0 4px 6px -4px #0000001a;
+}
+
+.group {
+  position: relative;
+}
+
+.input {
+  font-size: 16px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 400px;
+  border: none;
+  border-bottom: 1px solid #515151;
+  background: transparent;
+}
+
+.input:focus {
+  outline: none;
+}
+
+label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+  transition: 0.2s ease all;
+}
+
+.input:focus ~ label,
+.input:valid ~ label {
+  top: -20px;
+  font-size: 14px;
+  color: #5264ae;
+}
+
+.bar {
+  position: relative;
+  display: block;
+  width: 400px;
+}
+
+.bar:before,
+.bar:after {
+  content: "";
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #5264ae;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+.bar:before {
+  left: 50%;
+}
+
+.bar:after {
+  right: 50%;
+}
+
+.input:focus ~ .bar:before,
+.input:focus ~ .bar:after {
+  width: 50%;
+}
+
+.highlight {
+  position: absolute;
+  height: 60%;
+  width: 200px;
+  top: 25%;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.input:focus ~ .highlight {
+  animation: inputHighlighter 0.3s ease;
+}
+
+@keyframes inputHighlighter {
+  from {
+    background: #5264ae;
+  }
+
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+
+.tree {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  /*justify-content: space-between;*/
+  background-color: #fff;
+  border-radius: 8px;
+  border-width: 2px;
+  overflow: auto;
+  padding: 0 .6rem;
+  align-items: center;
+  align-content: center;
+  vertical-align: center;
+}
+
+.node-item {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0.2rem;
+  vertical-align: center;
+}
+.node-chevron {
+  font-weight: bold;
+  border-radius: 100;
+  width: 100%;
+  color: #515151;
+  margin: 0.4rem 0 0 0;
+  font-size: 0.7rem;
+}
+
+.add-button{
+  background-color: transparent;
+  color: rgb(88, 88, 88);
+}
+
+.node-options{
+  display:flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  gap: 2rem;
+  color: rgb(88, 88, 88);
+  vertical-align: middle;
+}
+
+.node-options > *:hover{
+  border:2px solid #515151;
+  padding:0 2px;
+  border-radius: 20%;
+  background-color: #dbdbdb;
+}

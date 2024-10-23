@@ -1,0 +1,24 @@
+.node-title-input:focus{
+    outline: none ;
+}
+
+.node-title-input{
+    overflow-wrap: break-word;
+}
+
+.paragraph{
+    margin-left:24px;
+}
+
+.part{
+    margin-left: 10px;
+}
+.chapter{
+    margin-left:14px;
+}
+.independantNotion{
+    margin-left:0px;
+}
+.notion{
+    margin-left:32px;
+}
